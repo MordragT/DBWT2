@@ -12,6 +12,7 @@ class ArticlesController extends Controller
         $name = $request->input('search');
         $ergebnis = ArticlesModel::search($name);
 
+        /*
         $articles = array();
 
         foreach ($ergebnis as $article){
@@ -23,8 +24,9 @@ class ArticlesController extends Controller
             "user_id" => $article->ab_creator_id )
             );
         }
+        */
 
-        return view('\pages\articles',["articles" =>$articles]);
+        return view('pages.articles',["articles" =>$ergebnis]); // optional $articles
 
     }
 }
