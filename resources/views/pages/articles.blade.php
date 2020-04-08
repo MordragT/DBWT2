@@ -16,6 +16,9 @@
         </tr>
     </thead>
 
+
+    {{-- Test 123--}}
+
     @foreach ($articles as $article)
         <tr>
             <td> {{ $article->id }} </td>
