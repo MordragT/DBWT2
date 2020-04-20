@@ -1,0 +1,16 @@
+#cookie_query{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: indianred;
+    text-align: center;
+
+}
+
+.button_position{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+
