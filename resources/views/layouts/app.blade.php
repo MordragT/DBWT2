@@ -16,7 +16,6 @@
     />
     <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
-
     <title>@yield('title')</title>
   </head>
 
@@ -30,6 +29,7 @@
     </div>
 
     <script src="{{ asset('js/cookiecheck.js')}}"></script>
+    <script src="{{ asset('js/menu.js') }}"></script>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
