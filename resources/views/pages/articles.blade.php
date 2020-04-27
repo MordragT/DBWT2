@@ -5,7 +5,7 @@
 @section('content')
 <table class="table table-striped">
     <thead class="thead-dark">
-        <tr>
+        <tr id ="table_head">
             <th class="col"> id </th>
             <th class="col"> ab_name </th>
             <th class="col"> ab_price </th>
@@ -17,7 +17,7 @@
     </thead>
 
     @foreach ($articles as $article)
-        <tr>
+        <tr class="buy_object">
             <td> {{ $article->id }} </td>
             <td> {{ $article->ab_name }} </td>
             <td> {{ $article->ab_price }} </td>

@@ -21,6 +21,9 @@
 
   <body>
 
+    <div id="warenkorb">
+    </div>
+
     <div class="container">
       @yield('content')
     </div>
@@ -30,6 +33,7 @@
 
     <script src="{{ asset('js/cookiecheck.js')}}"></script>
     <script src="{{ asset('js/menu.js') }}"></script>
+    <script src="{{ asset('js/warenkorb.js')}}"></script>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
