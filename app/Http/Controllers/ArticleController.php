@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\ArticlesModel;
+use App\Article;
 use Illuminate\Http\Request;
 
-class ArticlesController extends Controller
+class ArticleController extends Controller
 {
-    public function search(Request $request){
+    public function search(Request $request)
+    {
 
         $name = $request->input('search');
-        $ergebnis = ArticlesModel::search($name);
+        $ergebnis = Article::search($name);
 
         /*
         $articles = array();
@@ -26,7 +27,7 @@ class ArticlesController extends Controller
         }
         */
 
-        return view('pages.articles',["articles" =>$ergebnis]); // optional $articles
+        return view('pages.articles', ["articles" => $ergebnis]); // optional $articles
 
     }
 }
