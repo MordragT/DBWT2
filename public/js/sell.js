@@ -2,6 +2,7 @@ let main = document.getElementById("main");
 let form = document.createElement("form");
 form.name = "sell";
 form.method = "post";
+form.action = "/articles"
 main.appendChild(form);
 
 let csrfToken = document.head.querySelector("meta[name='csrf-token']").content;
