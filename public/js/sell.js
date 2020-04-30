@@ -1,8 +1,4 @@
 let main = document.getElementById("main");
-let h1 = document.createElement("h1");
-h1.innerText = "Verkaufen";
-h1.className = "my-5";
-main.appendChild(h1);
 let form = document.createElement("form");
 form.name = "sell";
 form.method = "post";

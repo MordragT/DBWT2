@@ -8,6 +8,8 @@
 
 @section('content')
 
+<h1 class="py-5">Verkaufen</h1>
+
 @error('name')<br><br>
 <p>{{ $errors->first('name') }}</p>
 @enderror

@@ -2,9 +2,12 @@
 
 @section('title') Artikel @endsection
 
+@section('header')
+<link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
+@endsection
+
 @section('scripts')
 <script src="{{ asset('js/cookiecheck.js')}}"></script>
-<script src="{{ asset('js/menu.js') }}"></script>
 <script src="{{ asset('js/warenkorb.js')}}"></script>
 @endsection
 

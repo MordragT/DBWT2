@@ -1,52 +1,64 @@
-let htmlMenu = document.createElement("ul");
-document.getElementById('main').appendChild(htmlMenu);
-//document.body.appendChild(htmlMenu);
-
-let menuItems = ["Home", "Kategorien", "Verkaufen"];
-let menuDropdowns = [["Unternehmen", "Philosophie", "Karriere"]];
-
-for (let item of menuItems) {
-    let li = document.createElement("li");
-    htmlMenu.appendChild(li);
-    let a = document.createElement("button");
-    li.appendChild(a);
-    a.innerText = item;
-    a.className = "menu-item";
+function Item(name, href, children) {
+    this.name = name;
+    this.href = href;
+    this.children = children;
 }
 
-for (let dropdown of menuDropdowns) {
-    let button = document.createElement("button");
-    htmlMenu.appendChild(button);
-    button.innerText = dropdown[0];
-    button.className = "menu-dropdown-button"
-    let container = document.createElement("div");
-    htmlMenu.appendChild(container);
-    //container.id = dropdown[0].toLowerCase();
-    container.style.display = "none";
-
-    dropdown.forEach(function (value, index) {
-        if (index != 0) {
-            let item = document.createElement("a");
-            container.appendChild(item);
-            item.innerText = value;
-            item.className = "menu-dropdown-item";
+class Menu {
+    constructor(items) {
+        this.items = items;
+        this.htmlMenu = document.createElement("ul");
+        this.htmlMenu.id = "menu";
+        document.getElementById('main').appendChild(this.htmlMenu);
+        for (let item of this.items) {
+            this.drawItem(item);
         }
-    });
+    }
+    drawItem(item) {
+        let li = document.createElement("li");
+        this.htmlMenu.appendChild(li);
+        li.className = "menu-item";
 
-    button.onclick = function () {
-        if (container.style.display == "none") {
-            container.style.display = "inline";
-        } else {
-            container.style.display = "none";
+        let button = document.createElement("a");
+        li.appendChild(button);
+        button.innerText = item.name;
+        button.href = item.href;
+
+        if (item.children.length > 0) {
+
+            let container = document.createElement("ul");
+            li.appendChild(container);
+            container.className = "dropdown"
+
+            for (let child of item.children) {
+                let li = document.createElement("li");
+                container.appendChild(li);
+                li.className = "menu-dropdown-item";
+
+                let item = document.createElement("a");
+                li.appendChild(item);
+                item.innerText = child.name;
+                item.href = child.href;
+            }
+            li.onmouseenter = () => container.style.display = "block";
+            li.onmouseleave = () => container.style.display = "none";
+            container.onmouseleave = () => container.style.display = "none";
         }
+    }
+    addItem(item) {
+        this.items.push(item);
+        this.drawItem(item);
     }
 }
 
+let menu = new Menu([
+    new Item("Home", "/", []),
+    new Item("Kategorien", "/", []),
+    new Item("Verkaufen", "/sell", []),
+    new Item("Unternehmen", "/", [
+        new Item("Philosophie", "/", []),
+        new Item("Karriere", "/", []),
+    ]),
+]);
 
-
-function hideDropdown() {
-    let dropdownItems = document.getElementsByClassName("menu-dropdown-item");
-    for (let item of dropdownItems) {
-        item.style.display = "none";
-    }
-}
+menu.addItem(new Item("test", "/", []));
