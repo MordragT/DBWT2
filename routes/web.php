@@ -8,5 +8,5 @@ Route::get('/isloggedin', 'AuthController@isloggedin')->name('haslogin');
 Route::get('/articles', 'ArticleController@search')->name('articles');
 Route::get('/sell', function () {
     return view('pages.sell');
-});
+})->name('sell');
 Route::post('/sell', 'SellController@sell');

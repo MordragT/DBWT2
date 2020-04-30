@@ -26,7 +26,6 @@ formInnerHTML += "</div>";
 formInnerHTML += "<button type='submit' class='btn btn-primary'>Abschicken</button>";
 
 form.innerHTML = formInnerHTML;
-//form.onsubmit = () {}
 
 form.onsubmit = function validateForm() {
     let name = document.forms["sell"]["name"].value;

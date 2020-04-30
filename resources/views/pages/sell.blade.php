@@ -8,6 +8,12 @@
 
 @section('content')
 
+@error('name')<br><br>
+<p>{{ $errors->first('name') }}</p>
+@enderror
 
+@error('description')<br><br>
+<p>{{ $errors->first('description') }}</p>
+@enderror
 
 @endsection

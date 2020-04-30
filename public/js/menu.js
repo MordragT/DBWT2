@@ -1,10 +1,11 @@
 let htmlMenu = document.createElement("ul");
-document.body.appendChild(htmlMenu);
+document.getElementById('main').appendChild(htmlMenu);
+//document.body.appendChild(htmlMenu);
 
 let menuItems = ["Home", "Kategorien", "Verkaufen"];
 let menuDropdowns = [["Unternehmen", "Philosophie", "Karriere"]];
 
-for(let item of menuItems) {
+for (let item of menuItems) {
     let li = document.createElement("li");
     htmlMenu.appendChild(li);
     let a = document.createElement("button");
@@ -13,7 +14,7 @@ for(let item of menuItems) {
     a.className = "menu-item";
 }
 
-for(let dropdown of menuDropdowns) {
+for (let dropdown of menuDropdowns) {
     let button = document.createElement("button");
     htmlMenu.appendChild(button);
     button.innerText = dropdown[0];
@@ -23,8 +24,8 @@ for(let dropdown of menuDropdowns) {
     //container.id = dropdown[0].toLowerCase();
     container.style.display = "none";
 
-    dropdown.forEach(function(value, index) {
-        if(index != 0) {
+    dropdown.forEach(function (value, index) {
+        if (index != 0) {
             let item = document.createElement("a");
             container.appendChild(item);
             item.innerText = value;
@@ -32,8 +33,8 @@ for(let dropdown of menuDropdowns) {
         }
     });
 
-    button.onclick = function() {
-        if(container.style.display == "none") {
+    button.onclick = function () {
+        if (container.style.display == "none") {
             container.style.display = "inline";
         } else {
             container.style.display = "none";
@@ -45,7 +46,7 @@ for(let dropdown of menuDropdowns) {
 
 function hideDropdown() {
     let dropdownItems = document.getElementsByClassName("menu-dropdown-item");
-    for(let item of dropdownItems) {
-        item.style.display="none";
+    for (let item of dropdownItems) {
+        item.style.display = "none";
     }
 }
