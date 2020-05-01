@@ -8,8 +8,10 @@ class Menu {
     constructor(items) {
         this.items = items;
         this.htmlMenu = document.createElement("ul");
+        this.divhtmlMenu = document.createElement("div");
         this.htmlMenu.id = "menu";
-        document.getElementById('main').appendChild(this.htmlMenu);
+        document.getElementById('main').prepend(this.divhtmlMenu);
+        this.divhtmlMenu.append(this.htmlMenu);
         for (let item of this.items) {
             this.drawItem(item);
         }

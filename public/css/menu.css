@@ -1,8 +1,7 @@
 #menu {
-    position: absolute;
+
     list-style: none;
-    top: 0;
-    padding: 0;
+    padding-bottom: 50px;
 }
 
 .menu-item {

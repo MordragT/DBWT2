@@ -1,20 +1,37 @@
-// Warenkorb Inhalt anzeigen lassen
+let warenkorb_title = document.createElement("h3");
+warenkorb_title.innerText = "Warenkorb";
+warenkorb_title.style.marginTop = "50px";
+
+// Warenkorb Tabelle erzeugen
+let div_table = document.createElement("div");
 let table = document.createElement("table");
+table.setAttribute("class","table table-striped");
 table.setAttribute("id","warenkorb_table");
-
 let tr_head = document.createElement("tr");
-tr_head.innerHTML = "<th> Name </th> <th> Price </th> <th> Delete </th>";
 
+function th_warenkorb(name){
+    let th = document.createElement("th");
+    th.innerText = name;
+    th.style.paddingRight = "20px";
+    tr_head.appendChild(th);
+}
+
+th_warenkorb("Name");
+th_warenkorb("Price");
+th_warenkorb(" ");
 table.appendChild(tr_head);
-document.getElementById("warenkorb").appendChild(table);
 
-// Füge eine neue Tabellenüberschrift hinzu
-let th_warenkorb = document.createElement("th");
-th_warenkorb.setAttribute("class","col");
-th_warenkorb.innerText = "Warenkorb";
-let table_head = document.getElementById('table_head').appendChild(th_warenkorb);
+document.getElementById("main").prepend(div_table);
+div_table.appendChild(warenkorb_title);
+div_table.appendChild(table);
 
-// Store all table rows
+// Füge eine neue Tabellenüberschrift bei den Artikeln hinzu
+let th_warenkorb_articles = document.createElement("th");
+th_warenkorb_articles.setAttribute("class","col");
+th_warenkorb_articles.innerText = "Warenkorb";
+document.getElementById('table_head').appendChild(th_warenkorb_articles);
+
+// Insert Data into new column
 let buy_articles = document.getElementsByClassName('buy_object');
 
 for (let i = 0; i < buy_articles.length; i++ ){
@@ -25,12 +42,9 @@ for (let i = 0; i < buy_articles.length; i++ ){
     buy_button.innerText = "+";
     buy_button.addEventListener('click',addWarenkorbClicked);
 
-
-    // create column
     let td_button = document.createElement("td");
     td_button.appendChild(buy_button);
 
-    // append column to table row
     buy_articles[i].appendChild(td_button);
 
 }
