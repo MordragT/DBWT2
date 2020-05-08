@@ -23,7 +23,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('/articles')->group(function () {
     Route::get('/', 'ArticleController@search_api');
     Route::get('id/{id}', function ($id) {
-        return response()->json(Article::find($id));
+        $article = Article::find($id);
+        if (isset($article)) {
+            return response()->json($article, 200);
+        } else {
+            return response()->json("Artikel nicht gefunden", 404);
+        }
     });
     Route::delete('id/{id}', 'ArticleController@delete');
 });

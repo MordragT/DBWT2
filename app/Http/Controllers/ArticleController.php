@@ -72,9 +72,12 @@ class ArticleController extends Controller
 
     public function search_api(Request $request)
     {
-        return response()->json(
-            Article::search($request->input('search'))
-        );
+        $articles = Article::search($request->input('search'));
+        if (!$articles->isEmpty()) {
+            return response()->json($articles, 200);
+        } else {
+            return response()->json("Keine Artikel gefunden", 404);
+        }
     }
 
     public function sell_api(Request $request)
@@ -89,7 +92,7 @@ class ArticleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            return response()->json($validator->errors(), 400);
         } else {
             $temp = $validator->validated();
             $article = new Article([
@@ -106,12 +109,14 @@ class ArticleController extends Controller
                 $article->save();
             } catch (QueryException $e) {
                 return response()->json(
-                    ['database' => 'Fehler mit der Datenbank.']
+                    ['database' => 'Fehler mit der Datenbank.'],
+                    500,
                 );
             }
 
             return response()->json(
-                $article->id
+                $article->id,
+                200,
             );
         }
     }
@@ -121,9 +126,9 @@ class ArticleController extends Controller
         $article = Article::find($id);
         if (isset($article)) {
             $article->delete();
-            return response()->json('success');
+            return response()->json('success', 200);
         } else {
-            return response()->json('ID not found.');
+            return response()->json('ID not found.', 404);
         }
     }
 }
