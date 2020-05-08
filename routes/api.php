@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Article;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/articles', 'ArticleController@search_api');
-Route::delete('/articles', 'ArticleController@delete');
+Route::prefix('/articles')->group(function () {
+    Route::get('/', 'ArticleController@search_api');
+    Route::get('id/{id}', function ($id) {
+        return response()->json(Article::find($id));
+    });
+    Route::delete('id/{id}', 'ArticleController@delete');
+});
 
 Route::post('/sell', 'ArticleController@sell_api');

@@ -116,9 +116,9 @@ class ArticleController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete($id)
     {
-        $article = Article::find($request->input('id'));
+        $article = Article::find($id);
         if (isset($article)) {
             $article->delete();
             return response()->json('success');
