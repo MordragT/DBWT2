@@ -115,4 +115,15 @@ class ArticleController extends Controller
             );
         }
     }
+
+    public function delete(Request $request)
+    {
+        $article = Article::find($request->input('id'));
+        if (isset($article)) {
+            $article->delete();
+            return response()->json('success');
+        } else {
+            return response()->json('ID not found.');
+        }
+    }
 }

@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/articles', 'ArticleController@search_api');
+Route::delete('/articles', 'ArticleController@delete');
 
 Route::post('/sell', 'ArticleController@sell_api');
