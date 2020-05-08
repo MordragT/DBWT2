@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use App\Article;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class ArticleController extends Controller
 {
@@ -44,14 +45,8 @@ class ArticleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect(route('sell'))
+            return back()
                 ->withErrors($validator);
-            /*
-            return response([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ]);
-            */
         } else {
             $temp = $validator->validated();
             $article = new Article([
@@ -64,9 +59,60 @@ class ArticleController extends Controller
                 'ab_creator_id' => 5,
                 'ab_createdate' => date('Y-m-d H:i:s'),
             ]);
-            $article->save();
+            try {
+                $article->save();
+            } catch (QueryException $e) {
+                return back()
+                    ->withErrors(['database' => 'Fehler mit der Datenbank.']);
+            }
 
             return redirect(route('articles'));
+        }
+    }
+
+    public function search_api(Request $request)
+    {
+        return response()->json(
+            Article::search($request->input('search'))
+        );
+    }
+
+    public function sell_api(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:80',
+            'description' => 'required|max:1000',
+            'price' => 'required|numeric|min:1',
+        ], [
+            'name.max' => "Leider ist der Artikelname zu lang.",
+            'description.max' => "Leider ist die Beschreibung zu lang.",
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        } else {
+            $temp = $validator->validated();
+            $article = new Article([
+                // Warum ist das notwendig ? Obwohl table migration auto increment
+                // und seeds in laravel, kein manuelles einfügen
+                'id' => Article::max('id') + 1,
+                'ab_name' => $temp['name'],
+                'ab_price' => $temp['price'],
+                'ab_description' => $temp['description'],
+                'ab_creator_id' => 5,
+                'ab_createdate' => date('Y-m-d H:i:s'),
+            ]);
+            try {
+                $article->save();
+            } catch (QueryException $e) {
+                return response()->json(
+                    ['database' => 'Fehler mit der Datenbank.']
+                );
+            }
+
+            return response()->json(
+                $article->id
+            );
         }
     }
 }

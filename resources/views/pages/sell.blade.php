@@ -18,4 +18,8 @@
 <p>{{ $errors->first('description') }}</p>
 @enderror
 
+@error('database')<br><br>
+<p>{{ $errors->first('database') }}</p>
+@enderror
+
 @endsection
