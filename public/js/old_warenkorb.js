@@ -59,26 +59,7 @@ function addWarenkorbClicked(event){
     article_price = article_infos[2].innerText;
 
     console.log(article_name, article_price);
-    // Visuell zu Warenkorb hinzufügen
     addArticleToWarenkorb(article_name,article_price);
-
-    // Artikel in DB einfügen
-    article_id = article_infos[0].innerText;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "./api/shoppingcart/" + article_id);
-    xhr.setRequestHeader('Content-Type',
-        'application/json');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log(xhr.responseText);
-            } else {
-                console.error(xhr.statusText);
-            }
-        }
-    };
-    xhr.send();
 }
 
 function addArticleToWarenkorb(article_name,article_price){
@@ -113,30 +94,13 @@ function addArticleToWarenkorb(article_name,article_price){
 }
 
 function removeWarenkorbClicked(event) {
-    //visuell
     let delete_button = event.target;
     let tr_article = delete_button.parentElement.parentElement;
     tr_article.remove();
 
-    //DB
-    var xhr = new XMLHttpRequest();
-    xhr.open('DELETE', "./api/shoppingcart/{shoppingcartid}/articles/{articleId}" + article_id);
-    xhr.setRequestHeader('Content-Type',
-        'application/json');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                console.log(xhr.responseText);
-            } else {
-                console.error(xhr.statusText);
-            }
-        }
-    };
-    xhr.send();
-
 }
 
-// Aufgabe 4
+// M3_Aufgabe_4
 /*
 var xhr = new XMLHttpRequest();
 xhr.open('DELETE', "./api/article/32");
