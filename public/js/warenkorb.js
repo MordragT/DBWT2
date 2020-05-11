@@ -52,6 +52,7 @@ for (let i = 0; i < buy_articles.length; i++ ){
 
 aktualisiereWarenkorb();
 
+// Füge Artikel in der Datenbank ein und aktualisiere die Ausgabe des Warenkorbs
 function addWarenkorbClicked(event){
     let buy_button = event.target;
     let article = buy_button.parentElement.parentElement;
@@ -59,19 +60,19 @@ function addWarenkorbClicked(event){
     // Wäre natürlich schöner wenn man den Reihen Klassennamen geben würde
     let article_infos = article.getElementsByTagName('td');
 
-    // Artikel in DB einfügen
     article_id = article_infos[0].innerText;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', "/api/shoppingcart",true);
+    xhr.open('POST', "/api/shoppingcart");
     xhr.setRequestHeader('Content-Type',
         'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
+                alert("Artikel wurde erfolgreich Ihrem Warenkorb hinzugefügt ");
                 aktualisiereWarenkorb();
             } else {
+                alert("FEHLER");
                 console.error(xhr.statusText);
             }
         }
@@ -80,6 +81,8 @@ function addWarenkorbClicked(event){
 
 }
 
+// Ruft die passenden Warenkorb Artikel aus der Datenbank raus und
+// ruft mit diesen als Parameter die Funktion warenkorbAusgabe auf
 function aktualisiereWarenkorb(){
 
     var xhr = new XMLHttpRequest();
@@ -102,8 +105,10 @@ function aktualisiereWarenkorb(){
 
 }
 
+// Gibt die gegebenen Warenkorb Artikel im Parameter auf der Benutzeroberfläche aus
 function warenkorbAusgabe(items){
 
+    //Lösche den body der Tabelle, falls er schon existiert
     t_body_r = table.getElementsByTagName('tbody');
     if(t_body_r[0] != null) {
         t_body_r[0].remove();
@@ -141,12 +146,13 @@ function warenkorbAusgabe(items){
         tr.appendChild(td_price);
         tr.appendChild(td_delete);
         tr.appendChild(td_warenkorb);
-        //document.getElementById("warenkorb_table").appendChild(tr);
+
         t_body.appendChild(tr);
     }
 
 }
 
+// Löscht den Warenkorbartikel aus der Datenbank
 function removeWarenkorbClicked(event) {
 
     let delete_button = event.target;
@@ -161,10 +167,11 @@ function removeWarenkorbClicked(event) {
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
+                alert(xhr.responseText);
                 aktualisiereWarenkorb();
             } else {
                 console.error(xhr.statusText);
+                alert(xhr.responseText);
             }
         }
     };
@@ -172,20 +179,3 @@ function removeWarenkorbClicked(event) {
 
 }
 
-// Aufgabe 4
-/*
-var xhr = new XMLHttpRequest();
-xhr.open('DELETE', "./api/article/32");
-xhr.setRequestHeader('Content-Type',
-    'application/json');
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-            console.log(xhr.responseText);
-        } else {
-            console.error(xhr.statusText);
-        }
-    }
-};
-xhr.send();
-*/
