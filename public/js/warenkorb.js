@@ -16,6 +16,7 @@ function th_warenkorb(name){
     tr_head.appendChild(th);
 }
 
+th_warenkorb("ID");
 th_warenkorb("Name");
 th_warenkorb("Price");
 th_warenkorb(" ");
@@ -49,84 +50,120 @@ for (let i = 0; i < buy_articles.length; i++ ){
 
 }
 
+aktualisiereWarenkorb();
+
 function addWarenkorbClicked(event){
     let buy_button = event.target;
     let article = buy_button.parentElement.parentElement;
 
     // Wäre natürlich schöner wenn man den Reihen Klassennamen geben würde
     let article_infos = article.getElementsByTagName('td');
-    article_name = article_infos[1].innerText;
-    article_price = article_infos[2].innerText;
-
-    console.log(article_name, article_price);
-    // Visuell zu Warenkorb hinzufügen
-    addArticleToWarenkorb(article_name,article_price);
 
     // Artikel in DB einfügen
     article_id = article_infos[0].innerText;
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', "./api/shoppingcart/" + article_id);
+    xhr.open('POST', "/api/shoppingcart",true);
+    xhr.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log(xhr.responseText);
+                aktualisiereWarenkorb();
+            } else {
+                console.error(xhr.statusText);
+            }
+        }
+    };
+    xhr.send('id=' + article_id);
+
+}
+
+function aktualisiereWarenkorb(){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/shoppingcart_items");
     xhr.setRequestHeader('Content-Type',
         'application/json');
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                console.log(xhr.responseText);
+                let items = JSON.parse(xhr.responseText);
+                console.log(items);
+                warenkorbAusgabe(items);
             } else {
                 console.error(xhr.statusText);
             }
         }
     };
     xhr.send();
+
+
 }
 
-function addArticleToWarenkorb(article_name,article_price){
+function warenkorbAusgabe(items){
 
-    // Auf Duplikat überprüfen
-    let warenkorb_artikel = document.getElementById("warenkorb_table").getElementsByTagName("td");
-    for(let i = 0; i < warenkorb_artikel.length; i++){
-        if(warenkorb_artikel[i].innerText === article_name){
-            return;
-        }
+    let all_tr = document.getElementById("warenkorb_table").getElementsByTagName('tr');
+    console.log(all_tr.length);
+    for (let m = 1; m < all_tr.length; m++) {
+
+        console.log(all_tr[m]);
+        console.log(m);
+        all_tr[m].remove();
     }
 
-    let tr = document.createElement("tr");
+    for(let i = 0; i < items.length; ++i) {
 
-    let td_name = document.createElement("td");
-    td_name.innerText = article_name;
+        let tr = document.createElement("tr");
 
-    let td_price = document.createElement("td");
-    td_price.innerText = article_price;
+        let td_id = document.createElement("td");
+        td_id.innerText = items[i]['ab_article_id'];
 
-    let td_delete = document.createElement("td");
+        let td_name = document.createElement("td");
+        td_name.innerText = items[i]['ab_name'];
 
-    let delete_button = document.createElement("button");
-    delete_button.innerText = "-";
-    delete_button.addEventListener('click',removeWarenkorbClicked);
+        let td_price = document.createElement("td");
+        td_price.innerText = items[i]['ab_price'];
 
-    td_delete.appendChild(delete_button);
-    tr.appendChild(td_name);
-    tr.appendChild(td_price);
-    tr.appendChild(td_delete);
-    document.getElementById("warenkorb_table").appendChild(tr);
+        let td_delete = document.createElement("td");
+
+        let td_warenkorb = document.createElement("td");
+        td_warenkorb.innerText = items[i]['ab_shoppingcart_id'];
+        td_warenkorb.style="display:none";
+
+        let delete_button = document.createElement("button");
+        delete_button.innerText = "-";
+        delete_button.addEventListener('click',removeWarenkorbClicked);
+
+        td_delete.appendChild(delete_button);
+        tr.appendChild(td_id);
+        tr.appendChild(td_name);
+        tr.appendChild(td_price);
+        tr.appendChild(td_delete);
+        tr.appendChild(td_warenkorb);
+        document.getElementById("warenkorb_table").appendChild(tr);
+
+    }
+
 }
 
 function removeWarenkorbClicked(event) {
-    //visuell
+
     let delete_button = event.target;
     let tr_article = delete_button.parentElement.parentElement;
-    tr_article.remove();
+    let td_article = tr_article.getElementsByTagName('td');
+    let td_id = td_article[0].innerText;
+    let td_warenkorb = td_article[4].innerText;
 
-    //DB
     var xhr = new XMLHttpRequest();
-    xhr.open('DELETE', "./api/shoppingcart/{shoppingcartid}/articles/{articleId}" + article_id);
-    xhr.setRequestHeader('Content-Type',
-        'application/json');
+    xhr.open('DELETE', "/api/shoppingcart/" + td_warenkorb + "/articles/" + td_id);
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 console.log(xhr.responseText);
+                aktualisiereWarenkorb();
             } else {
                 console.error(xhr.statusText);
             }

@@ -34,3 +34,5 @@ Route::prefix('/articles')->group(function () {
 });
 
 Route::post('/sell', 'ArticleController@sell_api');
+Route::post('/shoppingcart', 'WarenkorbController@add_article_api');
+Route::delete('/shoppingcart/{shoppingcartid}/articles/{articleId}', 'WarenkorbController@delete_article_api');

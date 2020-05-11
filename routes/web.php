@@ -10,3 +10,4 @@ Route::post('/articles', 'ArticleController@sell');
 Route::get('/sell', function () {
     return view('pages.sell');
 })->name('sell');
+Route::get('/shoppingcart_items', 'WarenkorbController@getItems')->name('getItems');
