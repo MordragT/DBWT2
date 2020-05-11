@@ -104,14 +104,13 @@ function aktualisiereWarenkorb(){
 
 function warenkorbAusgabe(items){
 
-    let all_tr = document.getElementById("warenkorb_table").getElementsByTagName('tr');
-    console.log(all_tr.length);
-    for (let m = 1; m < all_tr.length; m++) {
-
-        console.log(all_tr[m]);
-        console.log(m);
-        all_tr[m].remove();
+    t_body_r = table.getElementsByTagName('tbody');
+    if(t_body_r[0] != null) {
+        t_body_r[0].remove();
     }
+
+    let t_body = document.createElement("tbody");
+    table.appendChild(t_body);
 
     for(let i = 0; i < items.length; ++i) {
 
@@ -142,8 +141,8 @@ function warenkorbAusgabe(items){
         tr.appendChild(td_price);
         tr.appendChild(td_delete);
         tr.appendChild(td_warenkorb);
-        document.getElementById("warenkorb_table").appendChild(tr);
-
+        //document.getElementById("warenkorb_table").appendChild(tr);
+        t_body.appendChild(tr);
     }
 
 }
