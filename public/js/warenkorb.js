@@ -16,6 +16,7 @@ function th_warenkorb(name){
     tr_head.appendChild(th);
 }
 
+th_warenkorb("ID");
 th_warenkorb("Name");
 th_warenkorb("Price");
 th_warenkorb(" ");
@@ -49,53 +50,132 @@ for (let i = 0; i < buy_articles.length; i++ ){
 
 }
 
+aktualisiereWarenkorb();
+
+// Füge Artikel in der Datenbank ein und aktualisiere die Ausgabe des Warenkorbs
 function addWarenkorbClicked(event){
     let buy_button = event.target;
     let article = buy_button.parentElement.parentElement;
 
     // Wäre natürlich schöner wenn man den Reihen Klassennamen geben würde
     let article_infos = article.getElementsByTagName('td');
-    article_name = article_infos[1].innerText;
-    article_price = article_infos[2].innerText;
 
-    console.log(article_name, article_price);
-    addArticleToWarenkorb(article_name,article_price);
+    article_id = article_infos[0].innerText;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "/api/shoppingcart");
+    xhr.setRequestHeader('Content-Type',
+        'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                alert("Artikel wurde erfolgreich Ihrem Warenkorb hinzugefügt ");
+                aktualisiereWarenkorb();
+            } else {
+                alert("FEHLER");
+                console.error(xhr.statusText);
+            }
+        }
+    };
+    xhr.send('id=' + article_id);
+
 }
 
-function addArticleToWarenkorb(article_name,article_price){
+// Ruft die passenden Warenkorb Artikel aus der Datenbank raus und
+// ruft mit diesen als Parameter die Funktion warenkorbAusgabe auf
+function aktualisiereWarenkorb(){
 
-    // Auf Duplikat überprüfen
-    let warenkorb_artikel = document.getElementById("warenkorb_table").getElementsByTagName("td");
-    for(let i = 0; i < warenkorb_artikel.length; i++){
-        if(warenkorb_artikel[i].innerText === article_name){
-            return;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', "/shoppingcart_items");
+    xhr.setRequestHeader('Content-Type',
+        'application/json');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                let items = JSON.parse(xhr.responseText);
+                console.log(items);
+                warenkorbAusgabe(items);
+            } else {
+                console.error(xhr.statusText);
+            }
         }
+    };
+    xhr.send();
+
+
+}
+
+// Gibt die gegebenen Warenkorb Artikel im Parameter auf der Benutzeroberfläche aus
+function warenkorbAusgabe(items){
+
+    //Lösche den body der Tabelle, falls er schon existiert
+    t_body_r = table.getElementsByTagName('tbody');
+    if(t_body_r[0] != null) {
+        t_body_r[0].remove();
     }
 
-    let tr = document.createElement("tr");
+    let t_body = document.createElement("tbody");
+    table.appendChild(t_body);
 
-    let td_name = document.createElement("td");
-    td_name.innerText = article_name;
+    for(let i = 0; i < items.length; ++i) {
 
-    let td_price = document.createElement("td");
-    td_price.innerText = article_price;
+        let tr = document.createElement("tr");
 
-    let td_delete = document.createElement("td");
+        let td_id = document.createElement("td");
+        td_id.innerText = items[i]['ab_article_id'];
 
-    let delete_button = document.createElement("button");
-    delete_button.innerText = "-";
-    delete_button.addEventListener('click',removeWarenkorbClicked);
+        let td_name = document.createElement("td");
+        td_name.innerText = items[i]['ab_name'];
 
-    td_delete.appendChild(delete_button);
-    tr.appendChild(td_name);
-    tr.appendChild(td_price);
-    tr.appendChild(td_delete);
-    document.getElementById("warenkorb_table").appendChild(tr);
+        let td_price = document.createElement("td");
+        td_price.innerText = items[i]['ab_price'];
+
+        let td_delete = document.createElement("td");
+
+        let td_warenkorb = document.createElement("td");
+        td_warenkorb.innerText = items[i]['ab_shoppingcart_id'];
+        td_warenkorb.style="display:none";
+
+        let delete_button = document.createElement("button");
+        delete_button.innerText = "-";
+        delete_button.addEventListener('click',removeWarenkorbClicked);
+
+        td_delete.appendChild(delete_button);
+        tr.appendChild(td_id);
+        tr.appendChild(td_name);
+        tr.appendChild(td_price);
+        tr.appendChild(td_delete);
+        tr.appendChild(td_warenkorb);
+
+        t_body.appendChild(tr);
+    }
+
 }
 
+// Löscht den Warenkorbartikel aus der Datenbank
 function removeWarenkorbClicked(event) {
+
     let delete_button = event.target;
     let tr_article = delete_button.parentElement.parentElement;
-    tr_article.remove();
+    let td_article = tr_article.getElementsByTagName('td');
+    let td_id = td_article[0].innerText;
+    let td_warenkorb = td_article[4].innerText;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', "/api/shoppingcart/" + td_warenkorb + "/articles/" + td_id);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                alert(xhr.responseText);
+                aktualisiereWarenkorb();
+            } else {
+                console.error(xhr.statusText);
+                alert(xhr.responseText);
+            }
+        }
+    };
+    xhr.send();
 
 }
+

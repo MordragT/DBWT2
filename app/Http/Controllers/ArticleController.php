@@ -127,4 +127,13 @@ class ArticleController extends Controller
             return response()->json('ID not found.', 404);
         }
     }
+
+    public function delete_api($id)
+    {
+
+        $article = Article::destroy($id);
+        return response()->json($article);
+
+    }
+
 }
