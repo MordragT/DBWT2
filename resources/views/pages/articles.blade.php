@@ -70,7 +70,7 @@ W
         el: "#app",
         data: {
             search: "",
-            articles: null,
+            articles: [],
             warenkorbItems: null,
         },
         created: function() {
@@ -96,9 +96,9 @@ W
                 xhr.onload = () => {
                     if (xhr.status == 200) {
                         this.articles = JSON.parse(xhr.response);
-                        console.log(this.articles);
                     } else {
                         console.log(xhr.statusText);
+                        this.articles = [];
                     }
                 }
                 xhr.send();
@@ -142,7 +142,6 @@ W
                 //xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
                     if (xhr.status === 200) {
-                        console.log(xhr.response);
                         this.warenkorbItems = JSON.parse(xhr.response);
                     } else {
                         console.error(xhr.statusText);
