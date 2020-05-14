@@ -50,8 +50,6 @@ class ArticleController extends Controller
         } else {
             $temp = $validator->validated();
             $article = new Article([
-                // Warum ist das notwendig ? Obwohl table migration auto increment
-                // und seeds in laravel, kein manuelles einfügen
                 'id' => Article::max('id') + 1,
                 'ab_name' => $temp['name'],
                 'ab_price' => $temp['price'],
@@ -96,8 +94,6 @@ class ArticleController extends Controller
         } else {
             $temp = $validator->validated();
             $article = new Article([
-                // Warum ist das notwendig ? Obwohl table migration auto increment
-                // und seeds in laravel, kein manuelles einfügen
                 'id' => Article::max('id') + 1,
                 'ab_name' => $temp['name'],
                 'ab_price' => $temp['price'],
@@ -109,7 +105,7 @@ class ArticleController extends Controller
                 $article->save();
             } catch (QueryException $e) {
                 return response()->json(
-                    ['database' => 'Fehler mit der Datenbank.'],
+                    'Fehler mit der Datenbank.',
                     500,
                 );
             }
