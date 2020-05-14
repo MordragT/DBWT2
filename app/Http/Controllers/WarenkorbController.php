@@ -18,7 +18,7 @@ class WarenkorbController extends Controller
         $user_id = 3;
         $user_shoppingcart = Shoppingcart::search($user_id);
 
-        if($user_shoppingcart['ab_creator_id'] == null) {
+        if ($user_shoppingcart == null) {
 
             $shoppingcart = new Shoppingcart([
                 'id' => Shoppingcart::max('id') + 1,
@@ -30,9 +30,9 @@ class WarenkorbController extends Controller
             $user_shoppingcart = Shoppingcart::search($user_id);
         }
 
-        $user_shoppingcart_item = ShoppingcartItem::search($user_shoppingcart['id'],$request->get('id'));
+        $user_shoppingcart_item = ShoppingcartItem::search($user_shoppingcart['id'], $request->get('id'));
 
-        if($user_shoppingcart_item['id'] == null) {
+        if ($user_shoppingcart_item == null) {
 
             $shoppingcart_item = new ShoppingcartItem([
                 'id' => ShoppingcartItem::max('id') + 1,
@@ -48,10 +48,13 @@ class WarenkorbController extends Controller
     // Gibt anhand des aktuellen Benutzers die passenden Warenkorb Artikel aus
     public function getItems(Request $request)
     {
-        $user_id = $request->session()->get('user_id');
-        //$user_id = 6;
+        //$user_id = $request->session()->get('user_id');
+        $user_id = 3;
 
         $user_shoppingcart = Shoppingcart::search($user_id);
+        if ($user_shoppingcart == null) {
+            return response()->json("Kein Warenkorb vorhanden, vielleicht nicht eingeloggt?", 400);
+        }
         $shoppingcart_id = $user_shoppingcart['id'];
 
         $items = ShoppingcartItem::getItems($shoppingcart_id);
@@ -59,9 +62,9 @@ class WarenkorbController extends Controller
     }
 
     // Löscht Warenkorbartikel
-    public function delete_article_api($shoppingcartid,$articleId)
+    public function delete_article_api($shoppingcartid, $articleId)
     {
-        $item = ShoppingcartItem::where('ab_shoppingcart_id',$shoppingcartid)->where('ab_article_id',$articleId);
+        $item = ShoppingcartItem::where('ab_shoppingcart_id', $shoppingcartid)->where('ab_article_id', $articleId);
         if (isset($item)) {
             $item->delete();
             return response()->json('success', 200);

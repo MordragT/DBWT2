@@ -5,11 +5,11 @@ warenkorb_title.style.marginTop = "50px";
 // Warenkorb Tabelle erzeugen
 let div_table = document.createElement("div");
 let table = document.createElement("table");
-table.setAttribute("class","table table-striped");
-table.setAttribute("id","warenkorb_table");
+table.setAttribute("class", "table table-striped");
+table.setAttribute("id", "warenkorb_table");
 let tr_head = document.createElement("tr");
 
-function th_warenkorb(name){
+function th_warenkorb(name) {
     let th = document.createElement("th");
     th.innerText = name;
     th.style.paddingRight = "20px";
@@ -28,32 +28,30 @@ div_table.appendChild(table);
 
 // Füge eine neue Tabellenüberschrift bei den Artikeln hinzu
 let th_warenkorb_articles = document.createElement("th");
-th_warenkorb_articles.setAttribute("class","col");
+th_warenkorb_articles.setAttribute("class", "col");
 th_warenkorb_articles.innerText = "Warenkorb";
 document.getElementById('table_head').appendChild(th_warenkorb_articles);
 
 // Insert Data into new column
 let buy_articles = document.getElementsByClassName('buy_object');
 
-for (let i = 0; i < buy_articles.length; i++ ){
+for (let i = 0; i < buy_articles.length; i++) {
 
     // create "+" button with click event
     let buy_button = document.createElement("button");
-    buy_button.setAttribute("class","buy_button");
+    buy_button.setAttribute("class", "buy_button");
     buy_button.innerText = "+";
-    buy_button.addEventListener('click',addWarenkorbClicked);
+    buy_button.addEventListener('click', addWarenkorbClicked);
 
     let td_button = document.createElement("td");
     td_button.appendChild(buy_button);
-
     buy_articles[i].appendChild(td_button);
 
 }
 
-aktualisiereWarenkorb();
-
 // Füge Artikel in der Datenbank ein und aktualisiere die Ausgabe des Warenkorbs
-function addWarenkorbClicked(event){
+function addWarenkorbClicked(event) {
+    console.log("TEST");
     let buy_button = event.target;
     let article = buy_button.parentElement.parentElement;
 
@@ -79,11 +77,14 @@ function addWarenkorbClicked(event){
     };
     xhr.send('id=' + article_id);
 
+    if (isLoggedIn()) {
+        aktualisiereWarenkorb();
+    }
 }
 
 // Ruft die passenden Warenkorb Artikel aus der Datenbank raus und
 // ruft mit diesen als Parameter die Funktion warenkorbAusgabe auf
-function aktualisiereWarenkorb(){
+function aktualisiereWarenkorb() {
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', "/shoppingcart_items");
@@ -101,23 +102,21 @@ function aktualisiereWarenkorb(){
         }
     };
     xhr.send();
-
-
 }
 
 // Gibt die gegebenen Warenkorb Artikel im Parameter auf der Benutzeroberfläche aus
-function warenkorbAusgabe(items){
+function warenkorbAusgabe(items) {
 
     //Lösche den body der Tabelle, falls er schon existiert
     t_body_r = table.getElementsByTagName('tbody');
-    if(t_body_r[0] != null) {
+    if (t_body_r[0] != null) {
         t_body_r[0].remove();
     }
 
     let t_body = document.createElement("tbody");
     table.appendChild(t_body);
 
-    for(let i = 0; i < items.length; ++i) {
+    for (let i = 0; i < items.length; ++i) {
 
         let tr = document.createElement("tr");
 
@@ -134,11 +133,11 @@ function warenkorbAusgabe(items){
 
         let td_warenkorb = document.createElement("td");
         td_warenkorb.innerText = items[i]['ab_shoppingcart_id'];
-        td_warenkorb.style="display:none";
+        td_warenkorb.style = "display:none";
 
         let delete_button = document.createElement("button");
         delete_button.innerText = "-";
-        delete_button.addEventListener('click',removeWarenkorbClicked);
+        delete_button.addEventListener('click', removeWarenkorbClicked);
 
         td_delete.appendChild(delete_button);
         tr.appendChild(td_id);
@@ -177,5 +176,21 @@ function removeWarenkorbClicked(event) {
     };
     xhr.send();
 
+    if (isLoggedIn()) {
+        aktualisiereWarenkorb();
+    }
 }
 
+function isLoggedIn() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", "/isloggedin");
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+}
