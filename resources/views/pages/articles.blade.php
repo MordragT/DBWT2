@@ -30,7 +30,7 @@ W
             <td> @{{ article.ab_description }} </td>
             <td> @{{ article.ab_creator_id }} </td>
             <td> @{{ article.ab_createdate }} </td>
-            <td> <img class="rounded" v-bind:src="'articelpictures/' + article.id + '.jpg'" v-bind:alt="article.ab_name"> </td>
+            <td> <img class="rounded" v-bind:src="'articelpictures/' + article.id + '.jpg'" v-bind:alt="article.ab_name" height="128px"> </td>
         </tr>
 
     </table>
