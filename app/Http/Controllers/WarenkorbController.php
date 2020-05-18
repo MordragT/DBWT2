@@ -14,8 +14,7 @@ class WarenkorbController extends Controller
     // Lege ebenfalls in der DB einen neuen Warenkorb an, falls der Benutzer noch keinen hat
     public function add_article_api(Request $request)
     {
-        //$user_id = $request->session()->get('user_id');
-        $user_id = 3;
+        $user_id = $request->session()->get('user_id');
         $user_shoppingcart = Shoppingcart::search($user_id);
 
         if ($user_shoppingcart == null) {
@@ -48,8 +47,7 @@ class WarenkorbController extends Controller
     // Gibt anhand des aktuellen Benutzers die passenden Warenkorb Artikel aus
     public function getItems(Request $request)
     {
-        //$user_id = $request->session()->get('user_id');
-        $user_id = 3;
+        $user_id = $request->session()->get('user_id');
 
         $user_shoppingcart = Shoppingcart::search($user_id);
         if ($user_shoppingcart == null) {

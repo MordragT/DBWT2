@@ -54,7 +54,7 @@ class ArticleController extends Controller
                 'ab_name' => $temp['name'],
                 'ab_price' => $temp['price'],
                 'ab_description' => $temp['description'],
-                'ab_creator_id' => 5,
+                'ab_creator_id' => $request->session()->get('user_id'),
                 'ab_createdate' => date('Y-m-d H:i:s'),
             ]);
             try {
@@ -98,7 +98,7 @@ class ArticleController extends Controller
                 'ab_name' => $temp['name'],
                 'ab_price' => $temp['price'],
                 'ab_description' => $temp['description'],
-                'ab_creator_id' => 5,
+                'ab_creator_id' => $request->session()->get('user_id'),
                 'ab_createdate' => date('Y-m-d H:i:s'),
             ]);
             try {
@@ -106,13 +106,13 @@ class ArticleController extends Controller
             } catch (QueryException $e) {
                 return response()->json(
                     'Fehler mit der Datenbank.',
-                    500,
+                    500
                 );
             }
 
             return response()->json(
                 $article->id,
-                200,
+                200
             );
         }
     }
