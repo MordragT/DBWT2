@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>NewSite</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet" />
 
 </head>
 
@@ -39,6 +40,7 @@
             Telefax: +49 (0) 123 44 55 99<br />
             E-Mail: mustermann@musterfirma.de</p>
     </div>
+
 </script>
 
 <script>
@@ -48,7 +50,7 @@
             return {
             }
         },
-        template: '<p> Dies ist der Header </p>'
+        template: '<menum></menum>'
     })
 
     Vue.component('sitebody', {
@@ -66,13 +68,54 @@
             }
         },
         template:
-                '<a v-on:click="setimpressum">Impressum </a>',
+                '<p v-on:click="setimpressum">Impressum </p>',
         methods:{
             setimpressum : function(){
                 this.$root.$data.impressumshow = !this.$root.$data.impressumshow;
             }
         }
 
+    })
+
+    Vue.component('menum', {
+        data: function () {
+            return {
+                items: [
+                    {name:"Home",href:"/" ,children:[]},
+                    {name:"Kategorien",href:"/" ,children:[]},
+                    {name:"Verkaufen",href:"sell" ,children:[]},
+                    {   name:"Unternehmen",
+                        href:"/" ,
+                        children:[
+                            {name:"Philosophie",href:"/" ,children:[]},
+                            {name:"Karriere",href:"/" ,children:[]}
+                            ]
+                    }],
+                showdropd: "hidedropd"
+            }
+        },
+
+        template: `<div>
+                        <ul id="menu">
+
+                        <template v-for="item in items">
+                            <li class="menu-item" v-on:mouseenter="showdropd = 'showdropd'" v-on:mouseleave="showdropd = 'hidedropd'">
+                                <a v-bind:href="item.href"> @{{item.name}} </a>
+
+                                <template v-if="item.children.length > 0">
+                                    <ul v-bind:class="showdropd" class="dropdown">
+                                        <template v-for="child in item.children">
+                                            <li class="menu-dropdown-item">
+                                                <a v-bind:href="child.href">@{{ child.name }}</a>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>
+                            </li>
+                        </template>
+
+                        </ul>
+                    </div>`
     })
 
     Vue.component('impressum', {
