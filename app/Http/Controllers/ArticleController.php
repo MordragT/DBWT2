@@ -9,68 +9,20 @@ use Illuminate\Database\QueryException;
 
 class ArticleController extends Controller
 {
-    public function search(Request $request)
-    {
-
-        $name = $request->input('search');
-        $ergebnis = Article::search($name);
-
-        /*
-        $articles = array();
-
-        foreach ($ergebnis as $article){
-            array_push($articles, array("id" => $article->id,
-            "ab_name" => $article->ab_name,
-            "ab_price" => $article->ab_price,
-            "ab_description" => $article->ab_description,
-            "ab_createdate" => $article->ab_createdate,
-            "user_id" => $article->ab_creator_id )
-            );
-        }
-        */
-
-        return view('pages.articles', ["articles" => $ergebnis]); // optional $articles
-
-    }
-
-    public function sell(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:80',
-            'description' => 'required|max:1000',
-            'price' => 'required|numeric|min:1',
-        ], [
-            'name.max' => "Leider ist der Artikelname zu lang.",
-            'description.max' => "Leider ist die Beschreibung zu lang.",
-        ]);
-
-        if ($validator->fails()) {
-            return back()
-                ->withErrors($validator);
-        } else {
-            $temp = $validator->validated();
-            $article = new Article([
-                'id' => Article::max('id') + 1,
-                'ab_name' => $temp['name'],
-                'ab_price' => $temp['price'],
-                'ab_description' => $temp['description'],
-                'ab_creator_id' => $request->session()->get('user_id'),
-                'ab_createdate' => date('Y-m-d H:i:s'),
-            ]);
-            try {
-                $article->save();
-            } catch (QueryException $e) {
-                return back()
-                    ->withErrors(['database' => 'Fehler mit der Datenbank.']);
-            }
-
-            return redirect(route('articles'));
-        }
-    }
-
     public function search_api(Request $request)
     {
-        $articles = Article::search($request->input('search'));
+        $articles = Article::where('ab_name', 'ilike', '%' . $request->input('search') . '%');
+        $limit = $request->input('limit');
+        $offset = $request->input('offset');
+
+        if (isset($offset))
+            $articles->offset($offset);
+
+        if (isset($limit))
+            $articles->limit($limit);
+
+        $articles = $articles->get();
+
         if (!$articles->isEmpty()) {
             return response()->json($articles, 200);
         } else {
@@ -126,12 +78,5 @@ class ArticleController extends Controller
         } else {
             return response()->json('ID not found.', 404);
         }
-    }
-
-    public function delete_api($id)
-    {
-
-        $article = Article::destroy($id);
-        return response()->json($article);
     }
 }

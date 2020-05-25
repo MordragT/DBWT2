@@ -65,5 +65,3 @@ let menu = new Menu([
         new Item("Karriere", "/", []),
     ]),
 ]);
-
-menu.addItem(new Item("test", "/", []));

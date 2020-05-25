@@ -60,7 +60,7 @@
             },
             template: `<div>
                 <br><br>
-                <artikel></artikel>
+                <artikel v-bind:limit-articles="5"></artikel>
                 <impressum v-bind:visible="this.$root.$data.impressumVisible"></impressum>
             </div>`
         })
@@ -69,7 +69,7 @@
             data: function() {
                 return {}
             },
-            template: '<button v-on:click="this.$root.toggleImpressum">Impressum</button>'
+            template: '<button v-on:click="this.$root.toggleImpressum" class="form-control">Impressum</button>'
         })
 
         Vue.component("menu-dropdown-item", {
@@ -255,7 +255,7 @@
                                 </tr>
                             </thead>
 
-                            <tr v-for="article in filteredArticles" class="buy_object">
+                            <tr v-for="article in articles" class="buy_object">
                                 <td> @{{ article.id }} </td>
                                 <td> @{{ article.ab_name }} </td>
                                 <td> @{{ article.ab_price }} </td>
@@ -267,11 +267,19 @@
                             </tr>
 
                         </table>
+                        <div class="row my-5">
+                            <button v-on:click="lastSite" class="form-control mx-auto col-3">\<</button>
+                            <button v-on:click="nextSite" class="form-control mx-auto col-3">\></button>
+                        </div>
                     </div>`,
+            props: {
+                limitArticles: Number,
+            },
             data: function() {
                 return {
                     search: "",
                     articles: [],
+                    offsetArticles: 0,
                     warenkorbItems: null,
                 }
             },
@@ -280,19 +288,35 @@
                 this.getWarenkorb();
             },
             computed: {
+                // not in use anymore
                 filteredArticles: function() {
                     return this.articles.slice(0, 5);
                 }
             },
             methods: {
+                nextSite: function() {
+                    this.offsetArticles += this.limitArticles;
+                    this.getArticles();
+                    if (this.articles.length < this.limitArticles) {
+                        console.log("Ende, graue button aus")
+                    }
+                },
+                lastSite: function() {
+                    this.offsetArticles -= this.limitArticles;
+                    this.getArticles();
+                },
                 getArticles: function() {
                     let xhr = new XMLHttpRequest();
                     let query;
-                    if (this.search.length >= 3) {
-                        query = "/api/articles?search=" + this.search;
+                    if (this.search != "" && this.search.length <= 3) {
+                        return;
+                    } else if (this.search == "") {
+                        query = "/api/articles?limit=" + this.limitArticles + "&offset=" + this.offsetArticles;
                     } else {
-                        query = "/api/articles";
+                        query = "/api/articles?search=" + this.search + "&limit=" + this.limitArticles + "&offset=" + this.offsetArticles;
                     }
+
+                    console.log(query);
 
                     xhr.open("GET", query);
                     xhr.onload = () => {
