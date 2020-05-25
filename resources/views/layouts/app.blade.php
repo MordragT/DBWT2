@@ -16,9 +16,6 @@
 </head>
 
 <body>
-    <div id="warenkorb">
-    </div>
-
     <div class="container" id="main">
         <div class="my-5">
             @yield('content')

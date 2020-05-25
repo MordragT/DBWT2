@@ -3,7 +3,6 @@
 @section('title') Artikel @endsection
 
 @section('header')
-W
 <link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
 @endsection
 

@@ -133,7 +133,5 @@ class ArticleController extends Controller
 
         $article = Article::destroy($id);
         return response()->json($article);
-
     }
-
 }

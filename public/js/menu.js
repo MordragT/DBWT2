@@ -23,6 +23,7 @@ class Menu {
 
         let button = document.createElement("a");
         li.appendChild(button);
+        button.className = "menu-item-link"
         button.innerText = item.name;
         button.href = item.href;
 
@@ -30,7 +31,8 @@ class Menu {
 
             let container = document.createElement("ul");
             li.appendChild(container);
-            container.className = "dropdown"
+            container.className = "dropdown";
+            container.style.display = "none";
 
             for (let child of item.children) {
                 let li = document.createElement("li");
@@ -39,6 +41,7 @@ class Menu {
 
                 let item = document.createElement("a");
                 li.appendChild(item);
+                item.className = "menu-item-link"
                 item.innerText = child.name;
                 item.href = child.href;
             }

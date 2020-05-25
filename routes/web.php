@@ -7,7 +7,7 @@ Route::get('/logout', 'AuthController@logout')->name('logout');
 Route::get('/isloggedin', 'AuthController@isloggedin')->name('haslogin');
 Route::get('/articles', 'ArticleController@search')->name('articles');
 Route::get('/newsite', function () {
-    return view('pages.newsite');
+    return view('layouts.newsite');
 })->name('newsite');
 Route::post('/articles', 'ArticleController@sell');
 Route::get('/sell', function () {
