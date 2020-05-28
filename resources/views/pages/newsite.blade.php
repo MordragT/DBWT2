@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <title>NewSite</title>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link href="{{ asset('css/menu.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
 
 </head>
 
@@ -23,29 +21,7 @@
         <sitefooter></sitefooter>
 
     </div>
-
-    <!-- Warum nicht in template ? -->
-    <!-- https://www.e-recht24.de/impressum-generator.html -->
-    <!--script type="text/x-template" id="impressumhtml">
-        <div v-if="this.$root.$data.impressumShow">
-            <h1>Impressum</h1>
-
-            <h2>Angaben gem&auml;&szlig; &sect; 5 TMG</h2>
-            <p>Gruppe 16<br />
-                Eupenerstra&szlig;e 70<br />
-                52066 Aachen</p>
-
-            <p><strong>Vertreten durch:</strong><br />
-                Thomas Wehmoeller<br />
-                Julien Ahn</p>
-
-            <h2>Kontakt</h2>
-            <p>Telefon: +49 (0) 123 44 55 66<br />
-                Telefax: +49 (0) 123 44 55 99<br />
-                E-Mail: mustermann@musterfirma.de</p>
-        </div>
-    </script-->
-
+    <script src="{{ asset('js/app.js') }}"></script>
     <script>
         Vue.component('siteheader', {
             data: function() {
@@ -120,7 +96,7 @@
             },
             template: `<ul id="menu">
                 <menu-item name="Home" href="/"></menu-item>
-                <menu-item name="Kategorien href="/"></menu-item>
+                <menu-item name="Kategorien" href="/"></menu-item>
                 <menu-item name="Verkaufen" href="sell"></menu-item>
                 <menu-item name="Unternehmen" href="/">
                     <menu-dropdown-item name="Philosophie" href="/"></menu-dropdown-item>
@@ -128,66 +104,6 @@
                 </menu-item>
            </ul>
            `
-            /*
-            data: function() {
-                return {
-                    items: [{
-                            name: "Home",
-                            href: "/",
-                            children: []
-                        },
-                        {
-                            name: "Kategorien",
-                            href: "/",
-                            children: []
-                        },
-                        {
-                            name: "Verkaufen",
-                            href: "sell",
-                            children: []
-                        },
-                        {
-                            name: "Unternehmen",
-                            href: "/",
-                            children: [{
-                                    name: "Philosophie",
-                                    href: "/",
-                                    children: []
-                                },
-                                {
-                                    name: "Karriere",
-                                    href: "/",
-                                    children: []
-                                }
-                            ]
-                        }
-                    ],
-                    showdropd: "hidedropd"
-                }
-            },
-
-            template: `<div>
-                        <ul id="menu">
-
-                        <template v-for="item in items">
-                            <li class="menu-item" v-on:mouseenter="showdropd = 'showdropd'" v-on:mouseleave="showdropd = 'hidedropd'">
-                                <a class="menu-item-link" v-bind:href="item.href"> @{{item.name}} </a>
-
-                                <template v-if="item.children.length > 0">
-                                    <ul v-bind:class="showdropd" class="dropdown">
-                                        <template v-for="child in item.children">
-                                            <li class="menu-dropdown-item">
-                                                <a class="menu-item-link" v-bind:href="child.href">@{{ child.name }}</a>
-                                            </li>
-                                        </template>
-                                    </ul>
-                                </template>
-                            </li>
-                        </template>
-
-                        </ul>
-                    </div>`
-            */
         })
 
         Vue.component('impressum', {
@@ -308,7 +224,7 @@
                 getArticles: function() {
                     let xhr = new XMLHttpRequest();
                     let query;
-                    if (this.search != "" && this.search.length <= 3) {
+                    if (this.search != "" && this.search.length < 3) {
                         return;
                     } else if (this.search == "") {
                         query = "/api/articles?limit=" + this.limitArticles + "&offset=" + this.offsetArticles;
@@ -391,10 +307,6 @@
             }
         })
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 </body>
 
 </html>

@@ -21,7 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/articles')->group(function () {
-    Route::get('/', 'ArticleController@search_api');
+    Route::get('/', 'ArticleController@get_api');
+    Route::post('/', 'ArticleController@post_api');
     Route::get('id/{id}', function ($id) {
         $article = Article::find($id);
         if (isset($article)) {
@@ -30,9 +31,7 @@ Route::prefix('/articles')->group(function () {
             return response()->json("Artikel nicht gefunden", 404);
         }
     });
-    Route::delete('id/{id}', 'ArticleController@delete');
+    Route::delete('id/{id}', 'ArticleController@delete_api');
 });
-
-Route::post('/sell', 'ArticleController@sell_api');
 Route::post('/shoppingcart', 'WarenkorbController@add_article_api');
 Route::delete('/shoppingcart/{shoppingcartid}/articles/{articleId}', 'WarenkorbController@delete_article_api');

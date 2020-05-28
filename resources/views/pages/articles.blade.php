@@ -63,7 +63,6 @@
 @section('scripts')
 <script src="{{ asset('js/cookiecheck.js') }}"></script>
 <!--script src="{{ asset('js/warenkorb.js') }}"></script-->
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
     var app = new Vue({
         el: "#app",

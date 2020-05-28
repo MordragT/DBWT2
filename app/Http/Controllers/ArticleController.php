@@ -9,7 +9,7 @@ use Illuminate\Database\QueryException;
 
 class ArticleController extends Controller
 {
-    public function search_api(Request $request)
+    public function get_api(Request $request)
     {
         $articles = Article::where('ab_name', 'ilike', '%' . $request->input('search') . '%');
         $limit = $request->input('limit');
@@ -30,7 +30,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function sell_api(Request $request)
+    public function post_api(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:80',
@@ -57,7 +57,10 @@ class ArticleController extends Controller
                 $article->save();
             } catch (QueryException $e) {
                 return response()->json(
-                    'Fehler mit der Datenbank.',
+                    [
+                        'Fehler mit der Datenbank.',
+                        $e,
+                    ],
                     500
                 );
             }
@@ -69,7 +72,7 @@ class ArticleController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete_api($id)
     {
         $article = Article::find($id);
         if (isset($article)) {

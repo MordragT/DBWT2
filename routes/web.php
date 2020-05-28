@@ -10,8 +10,11 @@ Route::get('/articles', function () {
     return view('pages.articles');
 })->name('articles');
 Route::get('/newsite', function () {
-    return view('layouts.newsite');
+    return view('pages.newsite');
 })->name('newsite');
+Route::get('/newsell', function () {
+    return view('pages.newsell');
+})->name('newsell');
 
 Route::get('/sell', function () {
     return view('pages.sell');
