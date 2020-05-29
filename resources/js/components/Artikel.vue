@@ -31,7 +31,7 @@
       v-model="search"
       v-on:input="getArticles"
       placeholder="Suche..."
-      class="form-control my-4"
+      class="artikelsuche--color artikelsuche--border my-4"
     />
 
     <table class="table table-striped">
@@ -48,7 +48,7 @@
         </tr>
       </thead>
 
-      <tr v-for="article in articles" v-bind:key="article" class="buy_object">
+      <tr v-for="article in articles" v-bind:key="article" class="buy_object artikelliste__item--hover">
         <td>{{ article.id }}</td>
         <td>{{ article.ab_name }}</td>
         <td>{{ article.ab_price }}</td>

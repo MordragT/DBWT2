@@ -1,24 +1,24 @@
 <template>
   <form name="sell" method="post" v-on:submit="submit">
-    <p v-if="errors.length">
+    <div v-if="errors.length">
       <b>Bitte korrigiere folgende Fehler:</b>
       <ul>
         <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
-    </p>
+    </div>
     <p v-if="success">Der Artikel wurde erfolgreich eingetragen</p>
     <input type="hidden" name="_token" :value="csrf" />
-    <div class="form-group">
+    <div class="form__item1">
       <label for="name">Name</label>
-      <input class="form-control" type="text" v-model="nameMod" name="name" placeholder="Name..."/>
+      <input type="text" v-model="nameMod" name="name" placeholder="Name..."/>
     </div>
-    <div class="form-group">
+    <div class="form__item2">
       <label for="name">Beschreibung</label>
-      <textarea class="form-control" type="text" v-model="descriptionMod" name="description" placeholder="Beschreibung..."></textarea>
+      <textarea type="text" v-model="descriptionMod" name="description" placeholder="Beschreibung..."></textarea>
     </div>
-    <div class="form-group">
+    <div class="form__item3">
       <label for="price">Preis</label>
-      <input class="form-control" type="number" v-model="priceMod" name="price"/>
+      <input type="number" v-model="priceMod" name="price"/>
     </div>
     <button type="submit" class="btn btn-primary">Abschicken</button>
   </form>

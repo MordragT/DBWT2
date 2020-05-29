@@ -97,7 +97,7 @@
             template: `<ul id="menu">
                 <menu-item name="Home" href="/"></menu-item>
                 <menu-item name="Kategorien" href="/"></menu-item>
-                <menu-item name="Verkaufen" href="sell"></menu-item>
+                <menu-item name="Verkaufen" href="newsell"></menu-item>
                 <menu-item name="Unternehmen" href="/">
                     <menu-dropdown-item name="Philosophie" href="/"></menu-dropdown-item>
                     <menu-dropdown-item name="Karriere" href="/"></menu-dropdown-item>
@@ -132,6 +132,7 @@
             </div>`
         })
 
+        /*
         Vue.component("artikel", {
             template: `<div id="app">
                         <h2 class="my-2">Warenkorb</h2>
@@ -150,7 +151,7 @@
                                 <td> @{{ item.ab_name }}</td>
                                 <td> @{{ item.ab_price }}</td>
                                 <td> @{{ item.ab_shoppingcart_id }}</td>
-                                <td> <button v-on:click="removeWarenkorbItem(item.ab_article_id, item.ab_shoppingcart_id); getWarenkorb()" class="form-control">-</button> </td>
+                                <td> <button v-on:click="removeWarenkorbItem(item.ab_article_id, item.ab_shoppingcart_id), getWarenkorb()" class="form-control">-</button> </td>
                             </tr>
                         </table>
 
@@ -179,7 +180,7 @@
                                 <td> @{{ article.ab_creator_id }} </td>
                                 <td> @{{ article.ab_createdate }} </td>
                                 <td> <img class="rounded" v-bind:src="'articelpictures/' + article.id + '.jpg'" v-bind:alt="article.ab_name" height="128px"> </td>
-                                <td> <button v-on:click="addWarenkorbItem(article.id); getWarenkorb()" class="form-control">+</button> </td>
+                                <td> <button v-on:click="addWarenkorbItem(article.id), getWarenkorb()" class="form-control">+</button> </td>
                             </tr>
 
                         </table>
@@ -294,7 +295,7 @@
             }
 
         })
-
+        */
         new Vue({
             el: '#content',
             data: {

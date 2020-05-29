@@ -20,3 +20,8 @@ Route::get('/sell', function () {
     return view('pages.sell');
 })->name('sell');
 Route::get('/shoppingcart_items', 'WarenkorbController@getItems')->name('getItems');
+
+// vue-good-table
+Route::get('/goodtable', function () {
+    return view('pages.goodtable');
+})->name('goodtable');
