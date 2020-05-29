@@ -92,11 +92,7 @@
                 } else {
                     query =
                         "/api/articles?search=" +
-                        this.search +
-                        "&limit=" +
-                        this.limitArticles +
-                        "&offset=" +
-                        this.offsetArticles;
+                        this.search;
                 }
 
                 console.log(query);

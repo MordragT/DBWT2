@@ -34,4 +34,5 @@ Route::prefix('/articles')->group(function () {
     Route::delete('id/{id}', 'ArticleController@delete_api');
 });
 Route::post('/shoppingcart', 'WarenkorbController@add_article_api');
+Route::post('/sell', 'ArticleController@post_api');
 Route::delete('/shoppingcart/{shoppingcartid}/articles/{articleId}', 'WarenkorbController@delete_article_api');
