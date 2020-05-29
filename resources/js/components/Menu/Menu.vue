@@ -1,8 +1,8 @@
 <template>
   <ul class="menu">
-    <menu-item name="Home" href="/"></menu-item>
+    <menu-item name="Home" href="/newsite"></menu-item>
     <menu-item name="Kategorien" href="/"></menu-item>
-    <menu-item name="Verkaufen" href="sell"></menu-item>
+    <menu-item name="Verkaufen" href="/newsell"></menu-item>
     <menu-item name="Unternehmen" href="/">
       <menu-dropdown-item name="Philosophie" href="/"></menu-dropdown-item>
       <menu-dropdown-item name="Karriere" href="/"></menu-dropdown-item>

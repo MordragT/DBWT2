@@ -29,7 +29,7 @@
     <input
       type="text"
       v-model="search"
-      v-on:input="getArticles"
+      v-on:input="resetSite();getArticles();"
       placeholder="Suche..."
       class="artikelsuche--color artikelsuche--border my-4"
     />
@@ -48,7 +48,11 @@
         </tr>
       </thead>
 
-      <tr v-for="article in articles" v-bind:key="article" class="buy_object artikelliste__item--hover">
+      <tr
+        v-for="article in articles"
+        v-bind:key="article"
+        class="buy_object artikelliste__item--hover"
+      >
         <td>{{ article.id }}</td>
         <td>{{ article.ab_name }}</td>
         <td>{{ article.ab_price }}</td>
@@ -72,8 +76,10 @@
       <button v-on:click="lastSite" class="form-control mx-auto col-3">&lt;</button>
       <button v-on:click="nextSite" class="form-control mx-auto col-3">&gt;</button>
     </div>
+    <p v-if="lastSiteAttr">Letzte Seite erreicht</p>
   </div>
 </template>
+
 <script>
 export default {
   data: function() {
@@ -82,7 +88,8 @@ export default {
       articles: [],
       offsetArticles: 0,
       warenkorbItems: null,
-      limitArticles: 5
+      limitArticles: 5,
+      lastSiteAttr: false
     };
   },
   created: function() {
@@ -96,21 +103,29 @@ export default {
     }
   },
   methods: {
+    resetSite: function() {
+      this.offsetArticles = 0;
+    },
     nextSite: function() {
-      this.offsetArticles += this.limitArticles;
-      this.getArticles();
       if (this.articles.length < this.limitArticles) {
-        console.log("Ende, graue button aus");
+        this.lastSiteAttr = true;
+      } else {
+        this.lastSiteAttr = false;
+        this.offsetArticles += this.limitArticles;
+        this.getArticles();
       }
     },
     lastSite: function() {
-      this.offsetArticles -= this.limitArticles;
+      if (this.offsetArticles > 0) {
+        this.lastSiteAttr = false;
+        this.offsetArticles -= this.limitArticles;
+      }
       this.getArticles();
     },
     getArticles: function() {
       let xhr = new XMLHttpRequest();
       let query;
-      if (this.search != "" && this.search.length <= 3) {
+      if (this.search != "" && this.search.length < 3) {
         return;
       } else if (this.search == "") {
         query =

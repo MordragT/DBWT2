@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-<div id="app">
+<div id="content">
     <h2 class="my-2">Warenkorb</h2>
     <table class="table">
         <thead class="thead-dark">
@@ -62,10 +62,11 @@
 
 @section('scripts')
 <script src="{{ asset('js/cookiecheck.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 <!--script src="{{ asset('js/warenkorb.js') }}"></script-->
 <script>
     var app = new Vue({
-        el: "#app",
+        el: "#content",
         data: {
             search: "",
             articles: [],
@@ -84,11 +85,21 @@
             getArticles: function() {
                 let xhr = new XMLHttpRequest();
                 let query;
-                if (this.search.length >= 3) {
-                    query = "/api/articles?search=" + this.search;
-                } else {
+                if (this.search != "" && this.search.length < 3) {
+                    return;
+                } else if (this.search == "") {
                     query = "/api/articles";
+                } else {
+                    query =
+                        "/api/articles?search=" +
+                        this.search +
+                        "&limit=" +
+                        this.limitArticles +
+                        "&offset=" +
+                        this.offsetArticles;
                 }
+
+                console.log(query);
 
                 xhr.open("GET", query);
                 xhr.onload = () => {
@@ -98,14 +109,13 @@
                         console.log(xhr.statusText);
                         this.articles = [];
                     }
-                }
+                };
                 xhr.send();
             },
             addWarenkorbItem: function(id) {
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', "/api/shoppingcart");
-                xhr.setRequestHeader('Content-Type',
-                    'application/x-www-form-urlencoded');
+                xhr.open("POST", "/api/shoppingcart");
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         if (xhr.status === 200) {
@@ -116,11 +126,14 @@
                         }
                     }
                 };
-                xhr.send('id=' + id);
+                xhr.send("id=" + id);
             },
             removeWarenkorbItem: function(id, warenkorbID) {
                 var xhr = new XMLHttpRequest();
-                xhr.open('DELETE', "/api/shoppingcart/" + warenkorbID + "/articles/" + id);
+                xhr.open(
+                    "DELETE",
+                    "/api/shoppingcart/" + warenkorbID + "/articles/" + id
+                );
 
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
@@ -136,7 +149,7 @@
             },
             getWarenkorb: function() {
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', "/shoppingcart_items");
+                xhr.open("GET", "/shoppingcart_items");
                 //xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.onload = () => {
                     if (xhr.status === 200) {
@@ -148,6 +161,6 @@
                 xhr.send();
             }
         }
-    })
+    });
 </script>
 @endsection
