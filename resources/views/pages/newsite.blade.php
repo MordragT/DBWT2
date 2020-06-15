@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>NewSite</title>
-    <link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-
 </head>
 
 <body>
@@ -20,8 +18,10 @@
         <sitefooter></sitefooter>
 
     </div>
+
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
+
         Vue.component('siteheader', {
             data: function() {
                 return {}
@@ -72,6 +72,7 @@
                     E-Mail: mustermann@musterfirma.de</p>
             </div>`
         })
+
         new Vue({
             el: '#content',
             data: {

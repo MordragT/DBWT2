@@ -33,6 +33,10 @@
       placeholder="Suche..."
       class="artikelsuche--color artikelsuche--border my-4"
     />
+    <p> <b> Letzte Suchbegriffe </b> </p>
+    <ul>
+    <li v-for="item in lastsearcharticles" v-on:click="search = item;resetSite();getArticles();getLastSearchArticles()"> {{item}} </li>
+    </ul>
 
     <table class="table table-striped">
       <thead class="thead-dark">
@@ -45,6 +49,7 @@
           <th class="col-1">ab_createdate</th>
           <th class="col-2">picture</th>
           <th class="col-1">warenkorb</th>
+          <th class="col-1">angebot</th>
         </tr>
       </thead>
 
@@ -70,6 +75,9 @@
         <td>
           <button v-on:click="addWarenkorbItem(article.id); getWarenkorb()" class="form-control">+</button>
         </td>
+        <td>
+          <button v-if="userID == article.ab_creator_id" v-on:click="createAngebot(article.ab_name)" class="form-control">+</button>
+        </td>
       </tr>
     </table>
     <div class="row my-5">
@@ -81,7 +89,28 @@
 </template>
 
 <script>
+
+    let socket = new WebSocket('ws://localhost:8000/demo');
+    socket.onopen = (event) => {
+        console.log('Connected');
+    };
+
+    socket.onclose = (closeEvent) => {
+        console.log(
+            'Connection closed' +
+            ': code=', closeEvent.code,
+            '; reason=', closeEvent.reason);
+    };
+
+    socket.onmessage = (msgEvent) => {
+        let datam = JSON.parse(msgEvent.data);
+        console.log(datam);
+        window.alert("sometext");
+
+    };
+
 export default {
+
   data: function() {
     return {
       search: "",
@@ -89,12 +118,16 @@ export default {
       offsetArticles: 0,
       warenkorbItems: null,
       limitArticles: 5,
-      lastSiteAttr: false
+      lastSiteAttr: false,
+      userID: null,
+      lastsearcharticles: []
     };
   },
   created: function() {
     this.getArticles();
     this.getWarenkorb();
+    this.getUserId();
+    this.getLastSearchArticles();
   },
   computed: {
     // not in use anymore
@@ -156,6 +189,33 @@ export default {
       };
       xhr.send();
     },
+
+    getUserId: function() {
+        axios.get('/getId')
+            .then(response => {
+                console.log(response.data);
+                this.userID = response.data;
+                console.log(this.userID);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+
+    createAngebot: function(name) {
+
+        axios.post('/api/angebot',{
+            articlename: name,
+            userId: this.userID
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+
     addWarenkorbItem: function(id) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/api/shoppingcart");
@@ -203,6 +263,20 @@ export default {
         }
       };
       xhr.send();
+    },
+
+    getLastSearchArticles:function () {
+
+        axios.get('/api/articles/lastsearch')
+            .then(response => {
+                console.log(response.data);
+                this.lastsearcharticles = response.data;
+                console.log(this.lastsearcharticles);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
     }
   }
 };

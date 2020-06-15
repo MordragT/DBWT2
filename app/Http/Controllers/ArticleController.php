@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redis;
 use App\Article;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
@@ -11,6 +12,12 @@ class ArticleController extends Controller
 {
     public function get_api(Request $request)
     {
+        if($request->input('search') != "") {
+            Redis::lrem("lastarticlesearch", 0,$request->input('search'));
+            Redis::lpush("lastarticlesearch", $request->input('search'));
+        }
+        Redis::ltrim("lastarticlesearch",0,4);
+
         $articles = Article::where('ab_name', 'ilike', '%' . $request->input('search') . '%');
         $limit = $request->input('limit');
         $offset = $request->input('offset');
@@ -70,6 +77,22 @@ class ArticleController extends Controller
                 200
             );
         }
+    }
+
+    public function angebot_api(Request $request)
+    {
+        $name = $request->input('articlename');
+        $id = $request->input('userId');
+        $client = new \Bloatless\WebSocket\Client;
+        $client->connect('localhost', 8000, '/demo');
+        $client->sendData(json_encode([
+                    'action' => 'echo',
+                    'data' => [$name,$id]]
+            )
+        );
+
+        return response()->json($request->input('articlename'));
+
     }
 
     public function delete_api($id)
