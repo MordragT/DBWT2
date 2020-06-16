@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redis;
 use App\Article;
+use App\Events\ArticleSold;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 
@@ -12,11 +13,11 @@ class ArticleController extends Controller
 {
     public function get_api(Request $request)
     {
-        if($request->input('search') != "") {
-            Redis::lrem("lastarticlesearch", 0,$request->input('search'));
+        if ($request->input('search') != "") {
+            Redis::lrem("lastarticlesearch", 0, $request->input('search'));
             Redis::lpush("lastarticlesearch", $request->input('search'));
         }
-        Redis::ltrim("lastarticlesearch",0,4);
+        Redis::ltrim("lastarticlesearch", 0, 4);
 
         $articles = Article::where('ab_name', 'ilike', '%' . $request->input('search') . '%');
         $limit = $request->input('limit');
@@ -86,13 +87,11 @@ class ArticleController extends Controller
         $client = new \Bloatless\WebSocket\Client;
         $client->connect('localhost', 8000, '/demo');
         $client->sendData(json_encode([
-                    'action' => 'echo',
-                    'data' => [$name,$id]]
-            )
-        );
+            'action' => 'echo',
+            'data' => [$name, $id]
+        ]));
 
         return response()->json($request->input('articlename'));
-
     }
 
     public function delete_api($id)
@@ -104,5 +103,16 @@ class ArticleController extends Controller
         } else {
             return response()->json('ID not found.', 404);
         }
+    }
+
+    public function postSold_api($id)
+    {
+        $article = Article::find($id);
+        if (isset($article)) {
+            $userID = $article->ab_creator_id;
+            event(new ArticleSold($userID, $id));
+            return response()->json("Success");
+        }
+        return response()->json("Failure");
     }
 }

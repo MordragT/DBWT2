@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>NewSite</title>
+    <meta name="user_id" content="{{ Session::get('user_id', 0) }}" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
 </head>
 
@@ -20,8 +21,9 @@
     </div>
 
     <script src="{{ asset('js/app.js') }}"></script>
-    <script>
+    <script src="{{ asset('js/broadcasts.js') }}"></script>
 
+    <script>
         Vue.component('siteheader', {
             data: function() {
                 return {}

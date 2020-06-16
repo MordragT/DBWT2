@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="user_id" content="{{ Session::get('user_id', 0) }}" />
     <link href="{{ asset('css/stylesheet.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/menu.css') }}" rel="stylesheet" />
     <link href="{{ asset('css/articles.css') }}" rel="stylesheet" />
@@ -26,6 +27,7 @@
     @yield('scripts')
     <script src="{{ asset('js/menu.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/broadcasts.js') }}"></script>
 </body>
 
 </html>

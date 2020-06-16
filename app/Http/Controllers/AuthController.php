@@ -55,8 +55,7 @@ class AuthController extends Controller
 
             $id = $request->session()->get('user_id');
             return response()->json($id);
-        }
-        else {
+        } else {
             return response()->json("Keine Benutzer angemeldet", 404);
         }
     }
