@@ -27,6 +27,10 @@ Route::get('/goodtable', function () {
     return view('pages.goodtable');
 })->name('goodtable');
 
+Route::get('/statistics', function () {
+    return view('pages.statistics');
+});
+
 Route::get('/p5a2', function () {
     return view('pages.p5a2');
 })->name('p5a2');

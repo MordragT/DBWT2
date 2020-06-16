@@ -23,6 +23,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('artikel', require('./components/Artikel.vue').default);
 Vue.component('sell-form', require('./components/SellForm.vue').default);
 Vue.component('nav-menu', require('./components/Menu/Menu.vue').default);
+Vue.component('statistics', require('./components/Statistics.vue').default);
 
 import VueGoodTablePlugin from 'vue-good-table';
 Vue.use(VueGoodTablePlugin);
@@ -36,7 +37,7 @@ Vue.use(VueGoodTablePlugin);
 
 const app = new Vue({
     el: '#app',
-    data : {
+    data: {
         columns: [
             {
                 label: 'Name',
@@ -62,14 +63,14 @@ const app = new Vue({
             }
         ],
         rows: [
-            { id:1, name:"John", age: 20, createdAt: '',score: 0.03343 },
-            { id:2, name:"Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
-            { id:3, name:"Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
-            { id:4, name:"Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
-            { id:5, name:"Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
-            { id:6, name:"Elaine", age: 20, createdAt: '2011-10-04', score: 0.03343 },
-            { id:7, name:"Sonja", age: 60, createdAt: '2014-02-30', score: 0.03343 },
-            { id:8, name:"Hans", age: 43, createdAt: '2020-01-02', score: 0.03343 },
+            { id: 1, name: "John", age: 20, createdAt: '', score: 0.03343 },
+            { id: 2, name: "Jane", age: 24, createdAt: '2011-10-31', score: 0.03343 },
+            { id: 3, name: "Susan", age: 16, createdAt: '2011-10-30', score: 0.03343 },
+            { id: 4, name: "Chris", age: 55, createdAt: '2011-10-11', score: 0.03343 },
+            { id: 5, name: "Dan", age: 40, createdAt: '2011-10-21', score: 0.03343 },
+            { id: 6, name: "Elaine", age: 20, createdAt: '2011-10-04', score: 0.03343 },
+            { id: 7, name: "Sonja", age: 60, createdAt: '2014-02-30', score: 0.03343 },
+            { id: 8, name: "Hans", age: 43, createdAt: '2020-01-02', score: 0.03343 },
         ]
 
     }

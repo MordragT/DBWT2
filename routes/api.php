@@ -56,3 +56,11 @@ Route::get('/maintenance', function () {
     event(new Maintenance);
     return response()->json("Maintenance Mode enabled.");
 });
+
+Route::prefix('/statistics')->group(function () {
+    Route::prefix('/date')->group(function () {
+        Route::get('/{date}', 'StatisticsController@getDate_api');
+        Route::get('/{date}/url/{url}', 'StatisticsController@getDateURL_api');
+    });
+    Route::get('/url/{url}', 'StatisticsController@getURL_api');
+});
