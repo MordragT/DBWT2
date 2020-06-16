@@ -50,61 +50,50 @@ export default {
       return yyyy + "-" + mm + "-" + dd;
     },
     getTotalURL: function(url) {
-      var result = 0;
       url = encodeURIComponent(url);
-      console.log(url);
-      axios
-        .get(`/api/statistics/url/${url}`)
-        .then(response => {
-          return response.data;
-        })
-        .catch(reason => {
-          console.log(reason);
-        });
-      return result;
+      return axios.get(`/api/statistics/url/${url}`).then(response => {
+        return response.data;
+      });
     },
     getTotalDate: function(date) {
-      var result = 0;
-      axios
-        .get(`/api/statistics/date/${date}`)
-        .then(response => {
-          return response.data;
-        })
-        .catch(reason => {
-          console.log(reason);
-        });
-      return result;
+      return axios.get(`/api/statistics/date/${date}`).then(response => {
+        return response.data;
+      });
     },
     getDateURL: function(date, url) {
       url = encodeURIComponent(url);
-      var result = 0;
-      axios
+      return axios
         .get(`/api/statistics/date/${date}/url/${url}`)
         .then(response => {
           return response.data;
-        })
-        .catch(reason => {
-          console.log(reason);
         });
-      return result;
     }
   },
   created: function() {
-    this.newsiteTotal = this.getTotalURL("newsite");
-    this.newsellTotal = this.getTotalURL("newsell");
-    this.articlesTotal = this.getTotalURL("articles");
-    this.total = this.newsiteTotal + this.newsellTotal + this.articlesTotal;
+    this.getTotalURL("newsite").then(data => (this.newsiteTotal = data));
+    this.getTotalURL("newsell").then(data => (this.newsellTotal = data));
+    this.getTotalURL("articles").then(data => (this.articlesTotal = data));
+    this.total = "#";
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 7; i++) {
       let formattedDate = this.formatDate(this.currentDate);
       let item = {
         day: formattedDate,
-        newsite: this.getDateURL(formattedDate, "newsite"),
-        newsell: this.getDateURL(formattedDate, "newsell"),
-
-        articles: this.getDateURL(formattedDate, "articles"),
-        total: this.getTotalDate(formattedDate)
+        newsite: 0,
+        newsell: 0,
+        articles: 0,
+        total: 0
       };
+      this.getDateURL(formattedDate, "newsite").then(
+        data => (item.newsite = data)
+      );
+      this.getDateURL(formattedDate, "newsell").then(
+        data => (item.newsell = data)
+      );
+      this.getDateURL(formattedDate, "articles").then(
+        data => (item.articles = data)
+      );
+      this.getTotalDate(formattedDate).then(data => (item.total = data));
       this.week.push(item);
       this.currentDate.setDate(this.currentDate.getDate() - 1);
     }

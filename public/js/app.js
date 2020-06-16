@@ -2513,53 +2513,71 @@ __webpack_require__.r(__webpack_exports__);
       return yyyy + "-" + mm + "-" + dd;
     },
     getTotalURL: function getTotalURL(url) {
-      var result = 0;
       url = encodeURIComponent(url);
-      console.log(url);
-      axios.get("/api/statistics/url/".concat(url)).then(function (response) {
+      return axios.get("/api/statistics/url/".concat(url)).then(function (response) {
         return response.data;
-      })["catch"](function (reason) {
-        console.log(reason);
       });
-      return result;
     },
     getTotalDate: function getTotalDate(date) {
-      var result = 0;
-      axios.get("/api/statistics/date/".concat(date)).then(function (response) {
+      return axios.get("/api/statistics/date/".concat(date)).then(function (response) {
         return response.data;
-      })["catch"](function (reason) {
-        console.log(reason);
       });
-      return result;
     },
     getDateURL: function getDateURL(date, url) {
       url = encodeURIComponent(url);
-      var result = 0;
-      axios.get("/api/statistics/date/".concat(date, "/url/").concat(url)).then(function (response) {
+      return axios.get("/api/statistics/date/".concat(date, "/url/").concat(url)).then(function (response) {
         return response.data;
-      })["catch"](function (reason) {
-        console.log(reason);
       });
-      return result;
     }
   },
   created: function created() {
-    this.newsiteTotal = this.getTotalURL("newsite");
-    this.newsellTotal = this.getTotalURL("newsell");
-    this.articlesTotal = this.getTotalURL("articles");
-    this.total = this.newsiteTotal + this.newsellTotal + this.articlesTotal;
+    var _this = this;
 
-    for (var i = 0; i < 2; i++) {
-      var formattedDate = this.formatDate(this.currentDate);
+    this.getTotalURL("newsite").then(function (data) {
+      return _this.newsiteTotal = data;
+    });
+    this.getTotalURL("newsell").then(function (data) {
+      return _this.newsellTotal = data;
+    });
+    this.getTotalURL("articles").then(function (data) {
+      return _this.articlesTotal = data;
+    });
+    this.total = "#";
+
+    var _loop = function _loop(i) {
+      var formattedDate = _this.formatDate(_this.currentDate);
+
       var item = {
         day: formattedDate,
-        newsite: this.getDateURL(formattedDate, "newsite"),
-        newsell: this.getDateURL(formattedDate, "newsell"),
-        articles: this.getDateURL(formattedDate, "articles"),
-        total: this.getTotalDate(formattedDate)
+        newsite: 0,
+        newsell: 0,
+        articles: 0,
+        total: 0
       };
-      this.week.push(item);
-      this.currentDate.setDate(this.currentDate.getDate() - 1);
+
+      _this.getDateURL(formattedDate, "newsite").then(function (data) {
+        return item.newsite = data;
+      });
+
+      _this.getDateURL(formattedDate, "newsell").then(function (data) {
+        return item.newsell = data;
+      });
+
+      _this.getDateURL(formattedDate, "articles").then(function (data) {
+        return item.articles = data;
+      });
+
+      _this.getTotalDate(formattedDate).then(function (data) {
+        return item.total = data;
+      });
+
+      _this.week.push(item);
+
+      _this.currentDate.setDate(_this.currentDate.getDate() - 1);
+    };
+
+    for (var i = 0; i < 7; i++) {
+      _loop(i);
     }
   }
 });
