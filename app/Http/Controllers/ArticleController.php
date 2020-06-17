@@ -85,13 +85,14 @@ class ArticleController extends Controller
         $name = $request->input('articlename');
         $id = $request->input('userId');
         $client = new \Bloatless\WebSocket\Client;
-        $client->connect('localhost', 8000, '/demo');
+        $client->connect('localhost', 8000, '/angebot');
         $client->sendData(json_encode([
             'action' => 'echo',
-            'data' => [$name, $id]
+            'data' => $name,
+            'userId' => $id,
         ]));
 
-        return response()->json($request->input('articlename'));
+        return response()->json('success', 200);
     }
 
     public function delete_api($id)

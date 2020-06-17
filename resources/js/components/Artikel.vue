@@ -90,25 +90,6 @@
 
 <script>
 
-    let socket = new WebSocket('ws://localhost:8000/demo');
-    socket.onopen = (event) => {
-        console.log('Connected');
-    };
-
-    socket.onclose = (closeEvent) => {
-        console.log(
-            'Connection closed' +
-            ': code=', closeEvent.code,
-            '; reason=', closeEvent.reason);
-    };
-
-    socket.onmessage = (msgEvent) => {
-        let datam = JSON.parse(msgEvent.data);
-        console.log(datam);
-        window.alert("sometext");
-
-    };
-
 export default {
 
   data: function() {
@@ -128,6 +109,7 @@ export default {
     this.getWarenkorb();
     this.getUserId();
     this.getLastSearchArticles();
+    this.websocket();
   },
   computed: {
     // not in use anymore
@@ -276,6 +258,45 @@ export default {
             .catch(error => {
                 console.log(error);
             });
+
+    },
+
+    websocket:function () {
+
+        let socket = new WebSocket('ws://localhost:8000/angebot');
+        socket.onopen = (event) => {
+            console.log('Connected');
+        };
+
+        socket.onclose = (closeEvent) => {
+            console.log(
+                'Connection closed' +
+                ': code=', closeEvent.code,
+                '; reason=', closeEvent.reason);
+        };
+
+        socket.onmessage = (msgEvent) => {
+
+            let data = JSON.parse(msgEvent.data);
+
+            //console.log(data['article']);
+            //console.log(data['user']);
+
+            let counter = 0;
+            this.articles.forEach((value, index) => {
+                if(value.ab_name === data['article']){
+                    counter++;
+                }
+            });
+
+            if(data['user'] !== this.userID && counter > 0){
+                alert("Der Artikel " + data['article'] + " wird nun günstiger angeboten! Greifen Sie schnell zu.");
+            }
+
+
+
+
+        };
 
     }
   }
