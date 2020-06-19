@@ -1998,22 +1998,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var socket = new WebSocket('ws://localhost:8000/demo');
-
-socket.onopen = function (event) {
-  console.log('Connected');
-};
-
-socket.onclose = function (closeEvent) {
-  console.log('Connection closed' + ': code=', closeEvent.code, '; reason=', closeEvent.reason);
-};
-
-socket.onmessage = function (msgEvent) {
-  var datam = JSON.parse(msgEvent.data);
-  console.log(datam);
-  window.alert("sometext");
-};
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2032,6 +2016,7 @@ socket.onmessage = function (msgEvent) {
     this.getWarenkorb();
     this.getUserId();
     this.getLastSearchArticles();
+    this.websocket();
   },
   computed: {
     // not in use anymore
@@ -2168,6 +2153,36 @@ socket.onmessage = function (msgEvent) {
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    websocket: function websocket() {
+      var _this5 = this;
+
+      var socket = new WebSocket('ws://localhost:8000/angebot');
+
+      socket.onopen = function (event) {
+        console.log('Connected');
+      };
+
+      socket.onclose = function (closeEvent) {
+        console.log('Connection closed' + ': code=', closeEvent.code, '; reason=', closeEvent.reason);
+      };
+
+      socket.onmessage = function (msgEvent) {
+        var data = JSON.parse(msgEvent.data); //console.log(data['article']);
+        //console.log(data['user']);
+
+        var counter = 0;
+
+        _this5.articles.forEach(function (value, index) {
+          if (value.ab_name === data['article']) {
+            counter++;
+          }
+        });
+
+        if (data['user'] !== _this5.userID && counter > 0) {
+          alert("Der Artikel " + data['article'] + " wird nun günstiger angeboten! Greifen Sie schnell zu.");
+        }
+      };
     }
   }
 });

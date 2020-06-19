@@ -4,12 +4,13 @@ Echo.channel('forall')
     });
 
 let user_id = document.querySelector('meta[name="user_id"]').content;
-let article_name = "not found";
+//let article_name = "not found";
 Echo.channel(`ab_user.${user_id}`)
     .listen('ArticleSold', e => {
         axios.get(`/api/articles/id/${e.article_id}`)
             .then(response => {
-                article_name = response.data.ab_name;
+                //article_name = response.data.ab_name;
+                alert(`Großartig! Ihr Artikel ${response.data.ab_name} wurde erfolgreich verkauft!`);
             });
-        alert(`Großartig! Ihr Artikel ${article_name} wurde erfolgreich verkauft!`);
+        //alert(`Großartig! Ihr Artikel ${article_name} wurde erfolgreich verkauft!`);
     });
