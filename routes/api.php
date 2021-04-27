@@ -22,6 +22,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/register', 'AuthController@register_api');
+Route::post('/login', 'AuthController@login_api');
+Route::post('/logout', 'AuthController@logout_api');
+Route::post('/loggedin', 'AuthController@loggedIn_api');
+
 Route::prefix('/articles')->group(function () {
     Route::get('/', 'ArticleController@get_api');
     Route::post('/', 'ArticleController@post_api');

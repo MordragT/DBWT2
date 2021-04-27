@@ -18,9 +18,14 @@
         <td>{{ item.ab_shoppingcart_id }}</td>
         <td>
           <button
-            v-on:click="removeWarenkorbItem(item.ab_article_id, item.ab_shoppingcart_id); getWarenkorb()"
-            class="form-control"
-          >-</button>
+            v-on:click="
+              removeWarenkorbItem(item.ab_article_id, item.ab_shoppingcart_id);
+              getWarenkorb();
+            "
+            class="btn btn-dark"
+          >
+            -
+          </button>
         </td>
       </tr>
     </table>
@@ -29,13 +34,26 @@
     <input
       type="text"
       v-model="search"
-      v-on:input="resetSite();getArticles();"
+      v-on:input="
+        resetSite();
+        getArticles();
+      "
       placeholder="Suche..."
-      class="artikelsuche--color artikelsuche--border my-4"
+      class="form-control my-4"
     />
-    <p> <b> Letzte Suchbegriffe </b> </p>
+    <p><b> Letzte Suchbegriffe </b></p>
     <ul>
-    <li v-for="item in lastsearcharticles" v-on:click="search = item;resetSite();getArticles();getLastSearchArticles()"> {{item}} </li>
+      <li
+        v-for="item in lastsearcharticles"
+        v-on:click="
+          search = item;
+          resetSite();
+          getArticles();
+          getLastSearchArticles();
+        "
+      >
+        {{ item }}
+      </li>
     </ul>
 
     <table class="table table-striped">
@@ -73,26 +91,40 @@
           />
         </td>
         <td>
-          <button v-on:click="addWarenkorbItem(article.id); getWarenkorb()" class="form-control">+</button>
+          <button
+            v-on:click="
+              addWarenkorbItem(article.id);
+              getWarenkorb();
+            "
+            class="btn btn-dark"
+          >
+            +
+          </button>
         </td>
         <td>
-          <button v-if="userID == article.ab_creator_id" v-on:click="createAngebot(article.ab_name)" class="form-control">+</button>
+          <button
+            v-if="userID == article.ab_creator_id"
+            v-on:click="createAngebot(article.ab_name)"
+            class="btn btn-dark"
+          >
+            +
+          </button>
         </td>
       </tr>
     </table>
     <div class="row my-5">
-      <button v-on:click="lastSite" class="form-control mx-auto col-3">&lt;</button>
-      <button v-on:click="nextSite" class="form-control mx-auto col-3">&gt;</button>
+      <div class="mx-auto col-2 btn-group">
+        <button v-on:click="lastSite" class="btn btn-dark">&lt;</button>
+        <button v-on:click="nextSite" class="btn btn-dark">&gt;</button>
+      </div>
     </div>
     <p v-if="lastSiteAttr">Letzte Seite erreicht</p>
   </div>
 </template>
 
 <script>
-
 export default {
-
-  data: function() {
+  data: function () {
     return {
       search: "",
       articles: [],
@@ -101,10 +133,10 @@ export default {
       limitArticles: 5,
       lastSiteAttr: false,
       userID: null,
-      lastsearcharticles: []
+      lastsearcharticles: [],
     };
   },
-  created: function() {
+  created: function () {
     this.getArticles();
     this.getWarenkorb();
     this.getUserId();
@@ -113,15 +145,15 @@ export default {
   },
   computed: {
     // not in use anymore
-    filteredArticles: function() {
+    filteredArticles: function () {
       return this.articles.slice(0, 5);
-    }
+    },
   },
   methods: {
-    resetSite: function() {
+    resetSite: function () {
       this.offsetArticles = 0;
     },
-    nextSite: function() {
+    nextSite: function () {
       if (this.articles.length < this.limitArticles) {
         this.lastSiteAttr = true;
       } else {
@@ -130,14 +162,14 @@ export default {
         this.getArticles();
       }
     },
-    lastSite: function() {
+    lastSite: function () {
       if (this.offsetArticles > 0) {
         this.lastSiteAttr = false;
         this.offsetArticles -= this.limitArticles;
       }
       this.getArticles();
     },
-    getArticles: function() {
+    getArticles: function () {
       let xhr = new XMLHttpRequest();
       let query;
       if (this.search != "" && this.search.length < 3) {
@@ -171,57 +203,74 @@ export default {
       };
       xhr.send();
     },
+    // getArticles: async function() {
+    //   if (this.search != "" && this.search.length < 3) {
+    //     return;
+    //   } else if (this.search == "") {
+    //      return await axios.get("/api/articles", {
+    //       limit: this.limitArticles,
+    //       offset: this.offsetArticles,
+    //     }).data;
+    //   } else {
+    //     axios.get("/api/articles", {
+    //       limit: this.limitArticles,
+    //       offset: this.offsetArticles,
+    //       search: this.search,
+    //     })
+    //   }
+    // },
 
-    getUserId: function() {
-        axios.get('/getId')
-            .then(response => {
-                console.log(response.data);
-                this.userID = response.data;
-                console.log(this.userID);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    },
-
-    createAngebot: function(name) {
-
-        axios.post('/api/angebot',{
-            articlename: name,
-            userId: this.userID
+    getUserId: function () {
+      axios
+        .get("/getId")
+        .then((response) => {
+          console.log(response.data);
+          this.userID = response.data;
+          console.log(this.userID);
         })
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
-    addWarenkorbItem: function(id) {
+    createAngebot: function (name) {
+      axios
+        .post("/api/angebot", {
+          articlename: name,
+          userId: this.userID,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    addWarenkorbItem: function (id) {
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/api/shoppingcart");
       xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             //alert("Artikel wurde erfolgreich Ihrem Warenkorb hinzugefügt ");
           } else {
-            alert("Fehler der Artikel konnte nich hinzugefügt werden.");
+            alert("Fehler der Artikel konnte nicht hinzugefügt werden.");
             console.error(xhr.statusText);
           }
         }
       };
       xhr.send("id=" + id);
     },
-    removeWarenkorbItem: function(id, warenkorbID) {
+    removeWarenkorbItem: function (id, warenkorbID) {
       var xhr = new XMLHttpRequest();
       xhr.open(
         "DELETE",
         "/api/shoppingcart/" + warenkorbID + "/articles/" + id
       );
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             //alert(xhr.responseText);
@@ -233,7 +282,7 @@ export default {
       };
       xhr.send();
     },
-    getWarenkorb: function() {
+    getWarenkorb: function () {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/shoppingcart_items");
       //xhr.setRequestHeader('Content-Type', 'application/json');
@@ -247,58 +296,56 @@ export default {
       xhr.send();
     },
 
-    getLastSearchArticles:function () {
-
-        axios.get('/api/articles/lastsearch')
-            .then(response => {
-                console.log(response.data);
-                this.lastsearcharticles = response.data;
-                console.log(this.lastsearcharticles);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
+    getLastSearchArticles: function () {
+      axios
+        .get("/api/articles/lastsearch")
+        .then((response) => {
+          console.log(response.data);
+          this.lastsearcharticles = response.data;
+          console.log(this.lastsearcharticles);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
 
-    websocket:function () {
+    websocket: function () {
+      let socket = new WebSocket("ws://localhost:8000/angebot");
+      socket.onopen = (event) => {
+        console.log("Connected");
+      };
 
-        let socket = new WebSocket('ws://localhost:8000/angebot');
-        socket.onopen = (event) => {
-            console.log('Connected');
-        };
+      socket.onclose = (closeEvent) => {
+        console.log(
+          "Connection closed" + ": code=",
+          closeEvent.code,
+          "; reason=",
+          closeEvent.reason
+        );
+      };
 
-        socket.onclose = (closeEvent) => {
-            console.log(
-                'Connection closed' +
-                ': code=', closeEvent.code,
-                '; reason=', closeEvent.reason);
-        };
+      socket.onmessage = (msgEvent) => {
+        let data = JSON.parse(msgEvent.data);
 
-        socket.onmessage = (msgEvent) => {
+        //console.log(data['article']);
+        //console.log(data['user']);
 
-            let data = JSON.parse(msgEvent.data);
+        let counter = 0;
+        this.articles.forEach((value, index) => {
+          if (value.ab_name === data["article"]) {
+            counter++;
+          }
+        });
 
-            //console.log(data['article']);
-            //console.log(data['user']);
-
-            let counter = 0;
-            this.articles.forEach((value, index) => {
-                if(value.ab_name === data['article']){
-                    counter++;
-                }
-            });
-
-            if(data['user'] !== this.userID && counter > 0){
-                alert("Der Artikel " + data['article'] + " wird nun günstiger angeboten! Greifen Sie schnell zu.");
-            }
-
-
-
-
-        };
-
-    }
-  }
+        if (data["user"] !== this.userID && counter > 0) {
+          alert(
+            "Der Artikel " +
+              data["article"] +
+              " wird nun günstiger angeboten! Greifen Sie schnell zu."
+          );
+        }
+      };
+    },
+  },
 };
 </script>

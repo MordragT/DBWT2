@@ -12,7 +12,12 @@
 
 <body>
     <div id="app" class="container">
+        <nav-menu></nav-menu>
+        <br><br>
         @yield('content')
+        <br><br><br><br>
+        <impressum></impressum>
+        <br><br>
     </div>
     @yield('script')
     <script src="{{ asset('js/app.js') }}"></script>

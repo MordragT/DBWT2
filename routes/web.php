@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\SellController;
+Route::get('/', function () {
+    return redirect('/newsite');
+});
 
-Route::get('/login', 'AuthController@login')->name('login');
-Route::get('/logout', 'AuthController@logout')->name('logout');
-Route::get('/isloggedin', 'AuthController@isloggedin')->name('haslogin');
-Route::get('/getId', 'AuthController@getId')->name('login');
+// Route::get('/logout', 'AuthController@logout')->name('logout');
+// Route::get('/isloggedin', 'AuthController@isloggedin')->name('haslogin');
+// Route::get('/getId', 'AuthController@getId')->name('login');
 
 Route::get('/articles', function () {
     return view('pages.articles');
@@ -31,6 +32,15 @@ Route::get('/statistics', function () {
     return view('pages.statistics');
 });
 
-Route::get('/p5a2', function () {
-    return view('pages.p5a2');
-})->name('p5a2');
+Route::get('/register', function () {
+    return view('pages.register');
+})->name('register');
+
+Route::get('/login', function () {
+    return view('pages.login');
+})->name('login');
+
+
+// Route::get('/p5a2', function () {
+//     return view('pages.p5a2');
+// })->name('p5a2');

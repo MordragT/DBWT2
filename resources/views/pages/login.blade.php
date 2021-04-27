@@ -1,6 +1,7 @@
 @extends('layouts.newapp')
 
+@section('title') Login @endsection
+
 @section('content')
-<h2 class="my-5">Verkaufen</h2>
-<sell-form></sell-form>
+<login></login>
 @endsection

@@ -6,7 +6,9 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+//window.Vue = require('vue');
+import Vue from 'vue';
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -19,11 +21,13 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('artikel', require('./components/Artikel.vue').default);
 Vue.component('sell-form', require('./components/SellForm.vue').default);
 Vue.component('nav-menu', require('./components/Menu/Menu.vue').default);
 Vue.component('statistics', require('./components/Statistics.vue').default);
+Vue.component('impressum', require('./components/Impressum.vue').default);
+Vue.component('register', require('./components/Register.vue').default);
+Vue.component('login', require('./components/Login.vue').default);
 
 import VueGoodTablePlugin from 'vue-good-table';
 Vue.use(VueGoodTablePlugin);
