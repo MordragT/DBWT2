@@ -27,11 +27,12 @@ DB_PASSWORD=
 
 #### Starten
 
-- jeweils beide Befehle in einem eigenen Terminal
+- die Befehle jeweils in einem eigenen Terminal
 
 ```
 redis-server
 php artisan serve
+npm run dev
 ```
 
 #### Präsentation
